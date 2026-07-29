@@ -1,0 +1,491 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "activity.action.practise_again" : {
+      "comment" : "Button that starts an activity the user has attempted before.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practise Again"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再次练习"
+          }
+        }
+      }
+    },
+    "activity.action.start" : {
+      "comment" : "Button that starts an activity for the first time.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始"
+          }
+        }
+      }
+    },
+    "activity.connections.description" : {
+      "comment" : "Subtitle for an activity that links the current level with earlier patterns.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link this level with earlier patterns"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "联系本关卡与之前的规律"
+          }
+        }
+      }
+    },
+    "activity.connections.title" : {
+      "comment" : "Title for an activity that connects current and earlier learning.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Make Connections"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "建立联系"
+          }
+        }
+      }
+    },
+    "activity.get_familiar.description" : {
+      "comment" : "Subtitle for the introductory guided activity in a level.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn this level’s pattern"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "熟悉本关卡的规律"
+          }
+        }
+      }
+    },
+    "activity.get_familiar.title" : {
+      "comment" : "Title for the introductory guided activity in a level.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Familiar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初步练习"
+          }
+        }
+      }
+    },
+    "activity.listening.description" : {
+      "comment" : "Subtitle for a listening activity using symbols introduced in the level.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practise symbols introduced in this level"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "练习本关卡介绍的文字"
+          }
+        }
+      }
+    },
+    "activity.listening.title" : {
+      "comment" : "Title for a listening practice activity.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listening Practice"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "听音训练"
+          }
+        }
+      }
+    },
+    "activity.mixed_listening.description" : {
+      "comment" : "Subtitle for a listening activity that reviews the current and earlier levels.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recognise mixed audio up to this level"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "辨认截至本关卡的混合音频"
+          }
+        }
+      }
+    },
+    "activity.mixed_listening.title" : {
+      "comment" : "Title for a mixed listening review activity.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed Listening Practice"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "混合听音训练"
+          }
+        }
+      }
+    },
+    "activity.mixed_reading.description" : {
+      "comment" : "Subtitle for a reading activity that reviews the current and earlier levels.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read mixed items up to this level"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "认读截至本关卡的混合内容"
+          }
+        }
+      }
+    },
+    "activity.mixed_reading.title" : {
+      "comment" : "Title for a mixed reading review activity.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed Reading Practice"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "混合认读训练"
+          }
+        }
+      }
+    },
+    "activity.overview.action.read" : {
+      "comment" : "Action text shown on the overview card on wider layouts.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "阅读"
+          }
+        }
+      }
+    },
+    "activity.overview.title" : {
+      "comment" : "Title of the level overview activity.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "知识点"
+          }
+        }
+      }
+    },
+    "activity.reading.description" : {
+      "comment" : "Subtitle for a reading activity using symbols introduced in the level.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practise symbols introduced in this level"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "练习本关卡介绍的文字"
+          }
+        }
+      }
+    },
+    "activity.reading.title" : {
+      "comment" : "Title for a reading practice activity.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading Practice"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "认读训练"
+          }
+        }
+      }
+    },
+    "activity.status.done" : {
+      "comment" : "Status shown when a non-scored activity has been completed.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        }
+      }
+    },
+    "Get Familiar" : {
+      "comment" : "Title of a guided activity that introduces the user to the symbols of a given level.",
+      "isCommentAutoGenerated" : true
+    },
+    "Hangul Blitz" : {
+      "comment" : "The name of the app.",
+      "isCommentAutoGenerated" : true
+    },
+    "Learn this level’s pattern" : {
+      "comment" : "Description of a guided activity for a given level.",
+      "isCommentAutoGenerated" : true
+    },
+    "level.title.format" : {
+      "comment" : "Level heading. The first placeholder is the level number and the second is its course-defined title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Level %1$lld: %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第%1$lld关：%2$@"
+          }
+        }
+      }
+    },
+    "Link this level with earlier patterns" : {
+      "comment" : "Text displayed in a learning activity when the user is learning to make connections between patterns.",
+      "isCommentAutoGenerated" : true
+    },
+    "Listening Practice" : {
+      "comment" : "Title of a learning activity for listening practice.",
+      "isCommentAutoGenerated" : true
+    },
+    "Make Connections" : {
+      "comment" : "Title of a learning activity that links a level with earlier patterns.",
+      "isCommentAutoGenerated" : true
+    },
+    "menu.accessibility_label" : {
+      "comment" : "Accessibility label for the main app menu button.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App menu"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用菜单"
+          }
+        }
+      }
+    },
+    "menu.faq" : {
+      "comment" : "Menu action that opens frequently asked questions.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FAQ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "常见问题"
+          }
+        }
+      }
+    },
+    "menu.rate_app" : {
+      "comment" : "Menu action that asks the user to rate the app.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate the App"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为应用评分"
+          }
+        }
+      }
+    },
+    "menu.send_feedback" : {
+      "comment" : "Menu action that lets the user send feedback about the app.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Feedback"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发送反馈"
+          }
+        }
+      }
+    },
+    "Mixed Listening Practice" : {
+      "comment" : "Title of a learning activity that combines reading and listening.",
+      "isCommentAutoGenerated" : true
+    },
+    "Mixed Reading Practice" : {
+      "comment" : "Title of a learning activity that combines reading practice with items from this level.",
+      "isCommentAutoGenerated" : true
+    },
+    "Practise symbols introduced in this level" : {
+      "comment" : "Description of the reading practice activity.",
+      "isCommentAutoGenerated" : true
+    },
+    "progress.accessibility_label %lf %lld" : {
+      "comment" : "Accessibility description for a progress indicator. The first value is progress and the second is the maximum.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$g of %2$lld"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$g，共%2$lld"
+          }
+        }
+      }
+    },
+    "Read mixed items up to this level" : {
+      "comment" : "Description of a mixed reading activity.",
+      "isCommentAutoGenerated" : true
+    },
+    "Reading Practice" : {
+      "comment" : "Title of a reading practice activity.",
+      "isCommentAutoGenerated" : true
+    },
+    "Recognise mixed audio up to this level" : {
+      "comment" : "Description of a mixed listening activity.",
+      "isCommentAutoGenerated" : true
+    },
+    "section.current_level" : {
+      "comment" : "Heading above activities that focus on the selected level.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Level"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前关卡"
+          }
+        }
+      }
+    },
+    "section.mixed_review" : {
+      "comment" : "Heading above activities that review the selected and earlier levels together.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed Review"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "混合复习"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}
