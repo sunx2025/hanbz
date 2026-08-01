@@ -21,41 +21,6 @@ struct ActivityCard: View {
     }
 
     var body: some View {
-//        ZStack(alignment: .bottomLeading) {
-//            VStack(alignment: .leading, spacing: 4) {
-//                Text(verbatim: activity.title)
-//                    .font(.headline)
-//                    .foregroundStyle(.primary)
-//
-//                Text(verbatim: activity.description)
-//                    .font(.footnote)
-//                    .foregroundStyle(.secondary)
-//                    .lineLimit(3)
-//
-//                status
-//
-//                if presentation == .gridCard {
-//                    Color.clear.frame(height: 38)
-//                }
-//            }
-//            .frame(maxWidth: .infinity, minHeight: presentation == .gridCard ? 112 : nil, alignment: .topLeading)
-//            .padding(16)
-//            .background(Color(.secondarySystemGroupedBackground))
-//            .clipShape(.rect(cornerRadius: 16))
-//            .allowsHitTesting(false)
-//
-//            Button(action: action) {
-//                Color.clear
-//                    .contentShape(.rect)
-//            }
-//            .buttonStyle(.plain)
-//            .accessibilityLabel(Text(verbatim: activity.title))
-//
-//            if presentation == .gridCard {
-//                callToActionButton
-//                    .padding(16)
-//            }
-//        }
         ZStack(alignment: .bottomLeading) {
             VStack(alignment: .leading, spacing: presentation == .gridCard ? 8 : 4) {
                 Text(verbatim: activity.title)
