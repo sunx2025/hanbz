@@ -95,7 +95,7 @@ struct LevelActivitiesContent: View {
 
     private func sectionTitle(key: LocalizedStringKey, comment: StaticString) -> some View {
         Text(key, comment: comment)
-            .font(.headline)
+            .font(.subheadline.weight(.semibold))
             .foregroundStyle(.secondary)
             .padding(.top, 4)
     }
