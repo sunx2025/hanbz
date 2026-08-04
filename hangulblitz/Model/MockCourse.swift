@@ -40,6 +40,7 @@ enum MockCourse {
                 title: "Get Familiar",
                 descriptionKey: "activity.get_familiar.description",
                 description: "Learn this level’s pattern",
+                items: practiceItems(levelNumber: levelNumber),
                 locale: locale
             ),
             activity(
@@ -49,6 +50,7 @@ enum MockCourse {
                 title: "Reading Practice",
                 descriptionKey: "activity.reading.description",
                 description: "Practise symbols introduced in this level",
+                items: practiceItems(levelNumber: levelNumber),
                 locale: locale
             ),
             activity(
@@ -58,6 +60,7 @@ enum MockCourse {
                 title: "Listening Practice",
                 descriptionKey: "activity.listening.description",
                 description: "Practise symbols introduced in this level",
+                items: practiceItems(levelNumber: levelNumber),
                 locale: locale
             )
         ]
@@ -72,6 +75,7 @@ enum MockCourse {
                 title: "Make Connections",
                 descriptionKey: "activity.connections.description",
                 description: "Link this level with earlier patterns",
+                items: practiceItems(levelNumber: levelNumber),
                 locale: locale
             ),
             activity(
@@ -81,6 +85,7 @@ enum MockCourse {
                 title: "Mixed Reading Practice",
                 descriptionKey: "activity.mixed_reading.description",
                 description: "Read mixed items up to this level",
+                items: practiceItems(levelNumber: levelNumber),
                 locale: locale
             ),
             activity(
@@ -90,6 +95,7 @@ enum MockCourse {
                 title: "Mixed Listening Practice",
                 descriptionKey: "activity.mixed_listening.description",
                 description: "Recognise mixed audio up to this level",
+                items: practiceItems(levelNumber: levelNumber),
                 locale: locale
             )
         ]
@@ -102,6 +108,7 @@ enum MockCourse {
         title: String.LocalizationValue,
         descriptionKey: StaticString,
         description: String.LocalizationValue,
+        items: [String],
         locale: Locale
     ) -> LearningActivity {
         LearningActivity(
@@ -109,9 +116,32 @@ enum MockCourse {
             kind: kind,
             title: String(localized: titleKey, defaultValue: title, locale: locale),
             description: String(localized: descriptionKey, defaultValue: description, locale: locale),
-            items: [],
+            items: items,
             contrasts: []
         )
+    }
+
+    private static func practiceItems(levelNumber: Int) -> [String] {
+        switch levelNumber {
+        case 1:
+            ["ㅏ", "ㅓ", "ㅗ", "ㅜ", "ㅡ", "ㅣ", "아", "어", "오", "우", "으", "이"]
+        case 2:
+            ["ㄱ", "ㄴ", "가", "나", "거", "너", "고", "노", "구", "누"]
+        case 3:
+            ["ㄷ", "ㄹ", "다", "라", "더", "러", "도", "로", "두", "루"]
+        case 4:
+            ["ㅁ", "ㅂ", "마", "바", "머", "버", "모", "보", "무", "부"]
+        case 5:
+            ["가", "거", "고", "구", "그", "기", "나", "너", "노", "누"]
+        case 6:
+            ["ㅑ", "ㅕ", "ㅛ", "ㅠ", "야", "여", "요", "유"]
+        case 7:
+            ["가", "겨", "교", "규", "나", "녀", "뇨", "뉴"]
+        case 8:
+            ["ㅅ", "ㅈ", "ㅎ", "사", "자", "하", "서", "저", "허"]
+        default:
+            ["사", "서", "소", "수", "스", "시", "샤", "셔", "쇼", "슈"]
+        }
     }
 
     private struct LevelCopy {

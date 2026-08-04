@@ -46,9 +46,32 @@ enum AppButtonSize: CaseIterable {
     }
 }
 
+enum AppButtonWidth {
+    case hug
+    case fixed(CGFloat)
+    case fill
+
+    fileprivate var minimumWidth: CGFloat? {
+        guard case let .fixed(value) = self else { return nil }
+        return value
+    }
+
+    fileprivate var maximumWidth: CGFloat? {
+        switch self {
+        case .hug:
+            nil
+        case let .fixed(value):
+            value
+        case .fill:
+            .infinity
+        }
+    }
+}
+
 struct AppButton<Label: View>: View {
     let style: AppButtonVariant
     let size: AppButtonSize
+    let width: AppButtonWidth
     let action: () -> Void
 
     private let label: Label
@@ -56,11 +79,13 @@ struct AppButton<Label: View>: View {
     init(
         style: AppButtonVariant = .filled,
         size: AppButtonSize = .medium,
+        width: AppButtonWidth = .hug,
         action: @escaping () -> Void,
         @ViewBuilder label: () -> Label
     ) {
         self.style = style
         self.size = size
+        self.width = width
         self.action = action
         self.label = label()
     }
@@ -73,7 +98,11 @@ struct AppButton<Label: View>: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, size.horizontalPadding)
                 .padding(.vertical, 8)
-                .frame(minHeight: size.minimumHeight)
+                .frame(
+                    minWidth: width.minimumWidth,
+                    maxWidth: width.maximumWidth,
+                    minHeight: size.minimumHeight
+                )
                 .fixedSize(horizontal: false, vertical: true)
         }
         .buttonStyle(AppButtonAppearance(style: style))

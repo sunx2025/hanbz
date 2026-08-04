@@ -31,10 +31,7 @@ struct ContentView: View {
         }
         .fullScreenCover(item: $presentedActivity) { presentedActivity in
             NavigationStack {
-                ActivityPlaceholderView(
-                    title: presentedActivity.activity.title,
-                    showsCloseButton: true
-                )
+                activityView(for: presentedActivity, in: course)
             }
         }
         .tint(.accentColor)
@@ -71,6 +68,31 @@ struct ContentView: View {
         .accessibilityLabel(
             Text("menu.accessibility_label", comment: "Accessibility label for the main app menu button.")
         )
+    }
+
+    @ViewBuilder
+    private func activityView(
+        for presentedActivity: PresentedActivity,
+        in course: Course
+    ) -> some View {
+        switch presentedActivity.activity.kind {
+        case .guided:
+            let readingActivity = course
+                .level(id: presentedActivity.levelID)?
+                .currentActivities
+                .first { $0.kind == .reading }
+
+            GuidedPracticeView(
+                activity: presentedActivity.activity,
+                readingActivity: readingActivity
+            )
+
+        case .reading, .listening:
+            ActivityPlaceholderView(
+                title: presentedActivity.activity.title,
+                showsCloseButton: true
+            )
+        }
     }
 
     private struct PresentedActivity: Identifiable {
