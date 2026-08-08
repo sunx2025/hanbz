@@ -32,7 +32,7 @@ final class GuidedPracticeSession {
             ? ["ㅏ", "ㅓ", "ㅗ", "ㅜ", "ㅡ", "ㅣ"]
             : activity.items
         sourceItems = activityItems
-        items = activityItems.shuffled().map { GuidedPracticeItem(text: $0) }
+        items = activityItems.map { GuidedPracticeItem(text: $0) }
     }
 
     var currentItem: GuidedPracticeItem {

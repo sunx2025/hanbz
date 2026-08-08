@@ -15,6 +15,8 @@ struct GuidedPracticeView: View {
 
     @State private var session: GuidedPracticeSession
     @State private var audioPlayer = PracticeAudioPlayer()
+    @State private var isPreparing = true
+    @State private var preparationTask: Task<Void, Never>?
     @State private var showsReadingPlaceholder = false
 
     init(activity: LearningActivity, readingActivity: LearningActivity?) {
@@ -31,7 +33,9 @@ struct GuidedPracticeView: View {
                 : Color(.systemGroupedBackground),
             close: close
         ) {
-            if session.isComplete {
+            if isPreparing {
+                GuidedPracticeGetReadyView()
+            } else if session.isComplete {
                 GuidedPracticeCompletionView(
                     canStartReading: readingActivity != nil,
                     startReading: { showsReadingPlaceholder = true },
@@ -46,18 +50,24 @@ struct GuidedPracticeView: View {
                 ActivityPlaceholderView(title: readingActivity.title)
             }
         }
-        .onAppear(perform: playCurrentItem)
+        .onAppear(perform: beginPreparation)
         .onDisappear {
+            cancelPreparation()
             audioPlayer.stop()
         }
         .onChange(of: scenePhase) {
             switch scenePhase {
             case .active:
-                guard !session.isComplete else { return }
-                playCurrentItem()
+                if isPreparing {
+                    beginPreparation()
+                } else if !session.isComplete {
+                    playCurrentItem()
+                }
             case .inactive, .background:
+                cancelPreparation()
                 audioPlayer.stop()
             @unknown default:
+                cancelPreparation()
                 audioPlayer.stop()
             }
         }
@@ -117,6 +127,7 @@ struct GuidedPracticeView: View {
         )
         .padding(.horizontal)
         .frame(maxWidth: .infinity)
+        .onAppear(perform: playCurrentItem)
     }
 
     private func movePrevious() {
@@ -133,19 +144,67 @@ struct GuidedPracticeView: View {
     }
 
     private func restart() {
+        audioPlayer.stop()
         session.restart()
-        playCurrentItem()
+        isPreparing = true
+        beginPreparation()
     }
 
     private func playCurrentItem() {
+        guard !isPreparing, !session.isComplete, scenePhase == .active else {
+            return
+        }
         audioPlayer.play()
     }
 
+    private func beginPreparation() {
+        guard isPreparing, scenePhase == .active else { return }
+
+        cancelPreparation()
+        preparationTask = Task { @MainActor in
+            do {
+                try await Task.sleep(for: .seconds(1))
+            } catch {
+                return
+            }
+
+            guard !Task.isCancelled, isPreparing, scenePhase == .active else {
+                return
+            }
+
+            preparationTask = nil
+            isPreparing = false
+        }
+    }
+
+    private func cancelPreparation() {
+        preparationTask?.cancel()
+        preparationTask = nil
+    }
+
     private func close() {
+        cancelPreparation()
         audioPlayer.stop()
         dismiss()
     }
+}
 
+private struct GuidedPracticeGetReadyView: View {
+    var body: some View {
+        GeometryReader { geo in
+            VStack {
+                Text(
+                    "guided.get_ready",
+                    comment: "Brief message shown before guided practice begins automatically. Markdown may emphasise part of the phrase."
+                )
+                .font(.title)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            }
+            .frame(height: geo.size.height * 0.7)
+            .frame(maxWidth: .infinity)
+        }
+    }
 }
 
 private struct GuidedFlashCard: View {
@@ -153,29 +212,64 @@ private struct GuidedFlashCard: View {
     let audioPlayer: PracticeAudioPlayer
 
     var body: some View {
-        VStack(spacing: 24) {
-            Text("guided.instruction", comment: "Instruction shown at the top of a guided practice flashcard.")
-                .font(.headline)
-
-            Spacer(minLength: 8)
-
-            Text(verbatim: item.text)
-                .font(.system(size: 160, weight: .regular))
-                .minimumScaleFactor(0.34)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity)
-                .accessibilityLabel(Text(verbatim: item.text))
-
-            Spacer(minLength: 8)
-
-            AudioPlaybackIndicator(
-                isPlaying: audioPlayer.isPlaying,
-                samples: audioPlayer.samples,
-                romanization: item.romanization,
-                replay: audioPlayer.play
-            )
+//        VStack(spacing: 24) {
+//            Text("guided.instruction", comment: "Instruction shown at the top of a guided practice flashcard.")
+//                .font(.headline)
+//
+//            Spacer(minLength: 8)
+//
+//            Text(verbatim: item.text)
+//                .font(.system(size: 160, weight: .regular))
+//                .minimumScaleFactor(0.34)
+//                .lineLimit(1)
+//                .frame(maxWidth: .infinity)
+//                .accessibilityLabel(Text(verbatim: item.text))
+//
+//            Spacer(minLength: 8)
+//
+//            AudioPlaybackIndicator(
+//                isPlaying: audioPlayer.isPlaying,
+//                samples: audioPlayer.samples,
+//                romanization: item.romanization,
+//                replay: audioPlayer.play
+//            )
+//        }
+        Group {
+            GeometryReader { geo in
+                // the flash content layout is a 9 row grid
+                let rowHeight = geo.size.height / 9
+                VStack (spacing: 0) {
+                    Text("guided.instruction", comment: "Instruction shown at the top of a guided practice flashcard.")
+                        .font(.headline)
+                        .frame(height: rowHeight)
+                        //.background(Color.gray)
+                    
+                    // placeholder
+                    Color.clear
+                        .frame(height: rowHeight)
+                    
+                    Text(verbatim: item.text)
+                        .font(.system(size: 160, weight: .regular))
+                        .minimumScaleFactor(0.34)
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, maxHeight: rowHeight * 5)
+                        .accessibilityLabel(Text(verbatim: item.text))
+                    
+                    VStack {
+                        AudioPlaybackIndicator(
+                            isPlaying: audioPlayer.isPlaying,
+                            samples: audioPlayer.samples,
+                            romanization: item.romanization,
+                            replay: audioPlayer.play
+                        )
+                    }
+                    .frame(height: rowHeight * 2, alignment: .top)
+                    //.background(Color.gray)
+                }
+            }
+            
         }
-        .padding(.vertical, 32)
+        .padding(.vertical, 16)
         .padding(.horizontal, 16)
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(.rect(cornerRadius: 32))
@@ -230,6 +324,12 @@ private struct GuidedPracticeCompletionView: View {
             .padding(.horizontal, 24)
         }
     }
+}
+
+#Preview("Guided practice get ready") {
+    GuidedPracticeGetReadyView()
+        .background(Color(.systemGroupedBackground))
+        .environment(\.locale, Locale(identifier: "en_AU"))
 }
 
 #Preview("Guided practice completion") {

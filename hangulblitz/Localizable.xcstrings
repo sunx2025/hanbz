@@ -356,6 +356,23 @@
         }
       }
     },
+    "guided.get_ready" : {
+      "comment" : "Brief message shown before guided practice begins automatically. Markdown may emphasise part of the phrase.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let’s get **started**"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "准备\n**开始**"
+          }
+        }
+      }
+    },
     "guided.instruction" : {
       "comment" : "Instruction shown at the top of a guided practice flashcard.",
       "localizations" : {
