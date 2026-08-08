@@ -62,7 +62,9 @@ final class GuidedPracticeSession {
     }
 
     func restart() {
-        items = sourceItems.shuffled().map { GuidedPracticeItem(text: $0) }
+        // guided practice does not need shuffle
+        // items = sourceItems.shuffled().map { GuidedPracticeItem(text: $0) }
+        items = sourceItems.map { GuidedPracticeItem(text: $0) }
         currentIndex = 0
         isComplete = false
     }

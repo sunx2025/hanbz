@@ -50,6 +50,21 @@ struct GuidedPracticeView: View {
                 ActivityPlaceholderView(title: readingActivity.title)
             }
         }
+        .overlay(alignment: .top) {
+            if let issue = audioPlayer.audioIssue {
+                PracticeAudioIssueBanner(issue: issue)
+                    .frame(maxWidth: PracticeLayout.flashCardMaxWidth)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .task(id: issue.id) {
+                        try? await Task.sleep(for: .seconds(3))
+                        guard !Task.isCancelled else { return }
+                        audioPlayer.dismissIssue(id: issue.id)
+                    }
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: audioPlayer.audioIssue?.id)
         .onAppear(perform: beginPreparation)
         .onDisappear {
             cancelPreparation()
@@ -154,16 +169,19 @@ struct GuidedPracticeView: View {
         guard !isPreparing, !session.isComplete, scenePhase == .active else {
             return
         }
-        audioPlayer.play()
+        audioPlayer.playPrepared(text: session.currentItem.text)
     }
 
     private func beginPreparation() {
         guard isPreparing, scenePhase == .active else { return }
 
         cancelPreparation()
+        let currentText = session.currentItem.text
         preparationTask = Task { @MainActor in
             do {
-                try await Task.sleep(for: .seconds(1))
+                async let minimumDelay: Void = Task.sleep(for: .seconds(1))
+                async let audioPreparation: Void = audioPlayer.prepare(text: currentText)
+                _ = try await (minimumDelay, audioPreparation)
             } catch {
                 return
             }
@@ -247,6 +265,7 @@ private struct GuidedFlashCard: View {
                     // placeholder
                     Color.clear
                         .frame(height: rowHeight)
+                        .frame(height: rowHeight)
                     
                     Text(verbatim: item.text)
                         .font(.system(size: 160, weight: .regular))
@@ -260,7 +279,7 @@ private struct GuidedFlashCard: View {
                             isPlaying: audioPlayer.isPlaying,
                             samples: audioPlayer.samples,
                             romanization: item.romanization,
-                            replay: audioPlayer.play
+                            replay: { audioPlayer.playPrepared(text: item.text) }
                         )
                     }
                     .frame(height: rowHeight * 2, alignment: .top)
