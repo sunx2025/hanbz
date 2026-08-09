@@ -5,6 +5,7 @@
 
 import Foundation
 import Observation
+import OSLog
 
 struct GuidedPracticeItem: Identifiable, Equatable {
     let id: UUID
@@ -21,51 +22,105 @@ struct GuidedPracticeItem: Identifiable, Equatable {
 @MainActor
 @Observable
 final class GuidedPracticeSession {
-    private let sourceItems: [String]
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "hangulblitz",
+        category: "GuidedPracticeSession"
+    )
 
-    private(set) var items: [GuidedPracticeItem]
-    private(set) var currentIndex = 0
+    private let sourceSections: [[String]]
+
+    private(set) var sections: [[GuidedPracticeItem]]
+    private(set) var currentSectionIndex = 0
+    private(set) var currentItemIndex = 0
     private(set) var isComplete = false
+    private(set) var configurationError: String?
 
     init(activity: LearningActivity) {
-        let activityItems = activity.items.isEmpty
-            ? ["ㅏ", "ㅓ", "ㅗ", "ㅜ", "ㅡ", "ㅣ"]
-            : activity.items
-        sourceItems = activityItems
-        items = activityItems.map { GuidedPracticeItem(text: $0) }
+        let nonemptySections = activity.itemSections.filter { !$0.isEmpty }
+        sourceSections = nonemptySections
+        sections = nonemptySections.map { section in
+            section.map { GuidedPracticeItem(text: $0) }
+        }
+
+        if nonemptySections.isEmpty {
+            let message = "No items found"
+            configurationError = message
+            Self.logger.error("\(message, privacy: .public) for activity \(activity.id, privacy: .public)")
+        }
     }
 
-    var currentItem: GuidedPracticeItem {
-        items[currentIndex]
+    var currentItem: GuidedPracticeItem? {
+        guard sections.indices.contains(currentSectionIndex),
+              sections[currentSectionIndex].indices.contains(currentItemIndex) else {
+            return nil
+        }
+        return sections[currentSectionIndex][currentItemIndex]
+    }
+
+    var currentSectionItems: [GuidedPracticeItem] {
+        guard sections.indices.contains(currentSectionIndex) else { return [] }
+        return sections[currentSectionIndex]
+    }
+
+    var sectionNumber: Int {
+        currentSectionIndex + 1
+    }
+
+    var sectionCount: Int {
+        sections.count
     }
 
     var progress: Double {
-        guard !items.isEmpty else { return 0 }
-        return Double(currentIndex + 1) / Double(items.count)
+        let totalItemCount = sections.reduce(0) { $0 + $1.count }
+        guard totalItemCount > 0 else { return 0 }
+
+        let precedingItemCount = sections
+            .prefix(currentSectionIndex)
+            .reduce(0) { $0 + $1.count }
+        return Double(precedingItemCount + currentItemIndex + 1) / Double(totalItemCount)
     }
 
     var canMovePrevious: Bool {
-        currentIndex > 0
+        currentSectionIndex > 0 || currentItemIndex > 0
+    }
+
+    var isOnLastItem: Bool {
+        guard currentItem != nil else { return false }
+        return currentSectionIndex == sections.count - 1
+            && currentItemIndex == currentSectionItems.count - 1
     }
 
     func movePrevious() {
         guard canMovePrevious else { return }
-        currentIndex -= 1
+
+        if currentItemIndex > 0 {
+            currentItemIndex -= 1
+        } else {
+            currentSectionIndex -= 1
+            currentItemIndex = sections[currentSectionIndex].count - 1
+        }
     }
 
     func moveNext() {
-        if currentIndex == items.count - 1 {
-            isComplete = true
+        guard currentItem != nil else { return }
+
+        if currentItemIndex < currentSectionItems.count - 1 {
+            currentItemIndex += 1
+        } else if currentSectionIndex < sections.count - 1 {
+            currentSectionIndex += 1
+            currentItemIndex = 0
         } else {
-            currentIndex += 1
+            isComplete = true
         }
     }
 
     func restart() {
-        // guided practice does not need shuffle
-        // items = sourceItems.shuffled().map { GuidedPracticeItem(text: $0) }
-        items = sourceItems.map { GuidedPracticeItem(text: $0) }
-        currentIndex = 0
+        // Guided practice preserves both section order and item order.
+        sections = sourceSections.map { section in
+            section.map { GuidedPracticeItem(text: $0) }
+        }
+        currentSectionIndex = 0
+        currentItemIndex = 0
         isComplete = false
     }
 }

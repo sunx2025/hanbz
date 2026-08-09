@@ -33,7 +33,9 @@ struct GuidedPracticeView: View {
                 : Color(.systemGroupedBackground),
             close: close
         ) {
-            if isPreparing {
+            if let configurationError = session.configurationError {
+                GuidedPracticeConfigurationErrorView(message: configurationError)
+            } else if isPreparing {
                 GuidedPracticeGetReadyView()
             } else if session.isComplete {
                 GuidedPracticeCompletionView(
@@ -89,7 +91,9 @@ struct GuidedPracticeView: View {
     }
 
     private var practiceContent: some View {
-        VStack(spacing: 32) {
+        let currentItem = session.currentItem
+
+        return VStack(spacing: 32) {
             // Progress bar section
             VStack {
                 PracticeProgressBar(value: session.progress)
@@ -98,16 +102,22 @@ struct GuidedPracticeView: View {
             .padding(.horizontal)
 
             // Flashcard section
-            GuidedFlashCard(
-                item: session.currentItem,
-                audioPlayer: audioPlayer
-            )
-            .frame(
-                maxWidth: PracticeLayout.flashCardMaxWidth,
-                maxHeight: PracticeLayout.flashCardMaxHeight
-            )
-            .aspectRatio(PracticeLayout.flashCardAspectRatio, contentMode: .fit)
-            .layoutPriority(2)
+            if let currentItem {
+                GuidedFlashCard(
+                    item: currentItem,
+                    sectionItems: session.currentSectionItems,
+                    currentItemIndex: session.currentItemIndex,
+                    sectionNumber: session.sectionNumber,
+                    sectionCount: session.sectionCount,
+                    audioPlayer: audioPlayer
+                )
+                .frame(
+                    maxWidth: PracticeLayout.flashCardMaxWidth,
+                    maxHeight: PracticeLayout.flashCardMaxHeight
+                )
+                .aspectRatio(PracticeLayout.flashCardAspectRatio, contentMode: .fit)
+                .layoutPriority(2)
+            }
 
             // Buttons section
             VStack {
@@ -128,7 +138,17 @@ struct GuidedPracticeView: View {
                         width: .fill,
                         action: moveNext
                     ) {
-                        Text("practice.next", comment: "Button that moves to the next practice card.")
+                        if session.isOnLastItem {
+                            Text(
+                                "practice.finish",
+                                comment: "Button that completes a practice session from its final card."
+                            )
+                        } else {
+                            Text(
+                                "practice.next",
+                                comment: "Button that moves to the next practice card."
+                            )
+                        }
                     }
                 }
             }
@@ -166,17 +186,23 @@ struct GuidedPracticeView: View {
     }
 
     private func playCurrentItem() {
-        guard !isPreparing, !session.isComplete, scenePhase == .active else {
+        guard !isPreparing,
+              !session.isComplete,
+              scenePhase == .active,
+              let currentItem = session.currentItem else {
             return
         }
-        audioPlayer.playPrepared(text: session.currentItem.text)
+        audioPlayer.playPrepared(text: currentItem.text)
     }
 
     private func beginPreparation() {
-        guard isPreparing, scenePhase == .active else { return }
+        guard isPreparing,
+              scenePhase == .active,
+              let currentText = session.currentItem?.text else {
+            return
+        }
 
         cancelPreparation()
-        let currentText = session.currentItem.text
         preparationTask = Task { @MainActor in
             do {
                 async let minimumDelay: Void = Task.sleep(for: .seconds(1))
@@ -207,6 +233,16 @@ struct GuidedPracticeView: View {
     }
 }
 
+private struct GuidedPracticeConfigurationErrorView: View {
+    let message: String
+
+    var body: some View {
+        ContentUnavailableView {
+            Text(verbatim: message)
+        }
+    }
+}
+
 private struct GuidedPracticeGetReadyView: View {
     var body: some View {
         GeometryReader { geo in
@@ -227,7 +263,28 @@ private struct GuidedPracticeGetReadyView: View {
 
 private struct GuidedFlashCard: View {
     let item: GuidedPracticeItem
+    let sectionItems: [GuidedPracticeItem]
+    let currentItemIndex: Int
+    let sectionNumber: Int
+    let sectionCount: Int
     let audioPlayer: PracticeAudioPlayer
+
+    @Environment(\.locale) private var locale
+
+    private var instruction: String {
+        let format = String(
+            localized: "guided.instruction.section.format",
+            defaultValue: "Look – Listen – Read aloud (%1$lld/%2$lld)",
+            locale: locale,
+            comment: "Guided flashcard instruction. The first number is the current section and the second is the total section count."
+        )
+        return String(
+            format: format,
+            locale: locale,
+            Int64(sectionNumber),
+            Int64(sectionCount)
+        )
+    }
 
     var body: some View {
 //        VStack(spacing: 24) {
@@ -257,14 +314,15 @@ private struct GuidedFlashCard: View {
                 // the flash content layout is a 9 row grid
                 let rowHeight = geo.size.height / 9
                 VStack (spacing: 0) {
-                    Text("guided.instruction", comment: "Instruction shown at the top of a guided practice flashcard.")
+                    Text(verbatim: instruction)
                         .font(.headline)
                         .frame(height: rowHeight)
                         //.background(Color.gray)
                     
-                    // placeholder
-                    Color.clear
-                        .frame(height: rowHeight)
+                    GuidedSectionNavigator(
+                        items: sectionItems,
+                        currentItemIndex: currentItemIndex
+                    )
                         .frame(height: rowHeight)
                     
                     Text(verbatim: item.text)
@@ -297,6 +355,97 @@ private struct GuidedFlashCard: View {
                 .stroke(Color(.separator), lineWidth: 0.5)
         }
         .shadow(color: .black.opacity(0.05), radius: 16, y: 4)
+    }
+}
+
+private struct GuidedSectionNavigator: View {
+    let items: [GuidedPracticeItem]
+    let currentItemIndex: Int
+
+    var body: some View {
+        GuidedSectionFlowLayout(spacing: 8) {
+            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                Text(verbatim: item.text)
+                    .font(.subheadline)
+                    .fontWeight(index == currentItemIndex ? .bold : .regular)
+                    .foregroundStyle(index == currentItemIndex ? Color.accentColor : .primary)
+                    .lineLimit(1)
+                    .accessibilityAddTraits(index == currentItemIndex ? .isSelected : [])
+            }
+        }
+        .padding(.vertical, 2)
+        .padding(.horizontal, 16)
+        .background(Color("Muted"), in: .rect(cornerRadius: 12))
+//        .overlay {
+//            RoundedRectangle(cornerRadius: 12)
+//                .stroke(Color.accentColor, lineWidth: 0.5)
+//        }
+        .accessibilityElement(children: .contain)
+    }
+}
+
+private struct GuidedSectionFlowLayout: Layout {
+    let spacing: CGFloat
+
+    func sizeThatFits(
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) -> CGSize {
+        let result = layout(subviews: subviews, maxWidth: proposal.width)
+        return result.size
+    }
+
+    func placeSubviews(
+        in bounds: CGRect,
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) {
+        let result = layout(subviews: subviews, maxWidth: bounds.width)
+        for (index, point) in result.points.enumerated() {
+            subviews[index].place(
+                at: CGPoint(x: bounds.minX + point.x, y: bounds.minY + point.y),
+                anchor: .topLeading,
+                proposal: .unspecified
+            )
+        }
+    }
+
+    private func layout(subviews: Subviews, maxWidth proposedWidth: CGFloat?) -> LayoutResult {
+        let sizes = subviews.map { $0.sizeThatFits(.unspecified) }
+        let naturalWidth = sizes.reduce(CGFloat.zero) { $0 + $1.width }
+            + spacing * CGFloat(max(0, sizes.count - 1))
+        let maxWidth = max(0, proposedWidth ?? naturalWidth)
+
+        var points: [CGPoint] = []
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        var lineHeight: CGFloat = 0
+        var usedWidth: CGFloat = 0
+
+        for size in sizes {
+            if x > 0, x + size.width > maxWidth {
+                x = 0
+                y += lineHeight + spacing
+                lineHeight = 0
+            }
+
+            points.append(CGPoint(x: x, y: y))
+            x += size.width + spacing
+            lineHeight = max(lineHeight, size.height)
+            usedWidth = max(usedWidth, max(0, x - spacing))
+        }
+
+        return LayoutResult(
+            size: CGSize(width: min(usedWidth, maxWidth), height: y + lineHeight),
+            points: points
+        )
+    }
+
+    private struct LayoutResult {
+        let size: CGSize
+        let points: [CGPoint]
     }
 }
 

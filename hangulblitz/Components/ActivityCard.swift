@@ -22,20 +22,26 @@ struct ActivityCard: View {
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            VStack(alignment: .leading, spacing: presentation == .gridCard ? 8 : 4) {
-                Text(verbatim: activity.title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
+            HStack(alignment: .top, spacing: 8) {
+                if presentation == .listRow {
+                    ActivityLeadingIcon(systemName: activity.kind.leadingIconSystemName)
+                }
 
-                Text(verbatim: activity.description)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(3)
+                VStack(alignment: .leading, spacing: presentation == .gridCard ? 8 : 4) {
+                    Text(verbatim: activity.title)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
 
-                status
+                    Text(verbatim: activity.description)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(3)
 
-                if presentation == .gridCard {
-                    callToActionButton
+                    status
+
+                    if presentation == .gridCard {
+                        callToActionButton
+                    }
                 }
             }
             .frame(maxWidth: .infinity, minHeight: presentation == .gridCard ? 128 : nil, alignment: .topLeading)
@@ -89,6 +95,33 @@ struct ActivityCard: View {
         }
     }
 }
+
+private extension ActivityKind {
+    var leadingIconSystemName: String {
+        switch self {
+        case .guided:
+            return "lightbulb.max"
+        case .reading:
+            return "person.wave.2.fill"
+        case .listening:
+            return "headphones"
+        }
+    }
+}
+
+struct ActivityLeadingIcon: View {
+    let systemName: String
+
+    var body: some View {
+        Image(systemName: systemName)
+            .font(.footnote)
+            .foregroundStyle(.tint)
+            .frame(width: 32, height: 32)
+            .background(Color.muted, in: .circle)
+            .accessibilityHidden(true)
+    }
+}
+
 
 #Preview("Activity card states") {
     let locale = Locale(identifier: "en_AU")

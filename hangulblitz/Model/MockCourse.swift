@@ -18,115 +18,259 @@ enum MockCourse {
             id: "hangul-foundations",
             levels: content.enumerated().map { index, copy in
                 let levelNumber = index + 1
+                let practice = practiceContent(levelNumber: levelNumber)
+
                 return Level(
                     id: "level-\(levelNumber)",
                     number: levelNumber,
                     title: copy.title,
                     description: copy.description,
                     overview: Overview(),
-                    currentActivities: currentActivities(levelNumber: levelNumber, locale: locale),
-                    mixedActivities: mixedActivities(levelNumber: levelNumber, locale: locale)
+                    currentActivities: activities(
+                        levelNumber: levelNumber,
+                        scope: .current,
+                        content: practice.current,
+                        locale: locale
+                    ),
+                    mixedActivities: activities(
+                        levelNumber: levelNumber,
+                        scope: .mixed,
+                        content: practice.mixed,
+                        locale: locale
+                    )
                 )
             }
         )
     }
 
-    private static func currentActivities(levelNumber: Int, locale: Locale) -> [LearningActivity] {
-        [
-            activity(
-                id: "level-\(levelNumber)-get-familiar",
-                kind: .guided,
-                titleKey: "activity.get_familiar.title",
-                title: "Get Familiar",
-                descriptionKey: "activity.get_familiar.description",
-                description: "Learn this level’s pattern",
-                items: practiceItems(levelNumber: levelNumber),
-                locale: locale
-            ),
-            activity(
-                id: "level-\(levelNumber)-reading",
-                kind: .reading,
-                titleKey: "activity.reading.title",
-                title: "Reading Practice",
-                descriptionKey: "activity.reading.description",
-                description: "Practise symbols introduced in this level",
-                items: practiceItems(levelNumber: levelNumber),
-                locale: locale
-            ),
-            activity(
-                id: "level-\(levelNumber)-listening",
-                kind: .listening,
-                titleKey: "activity.listening.title",
-                title: "Listening Practice",
-                descriptionKey: "activity.listening.description",
-                description: "Practise symbols introduced in this level",
-                items: practiceItems(levelNumber: levelNumber),
-                locale: locale
-            )
-        ]
+    private enum PracticeScope {
+        case current
+        case mixed
     }
 
-    private static func mixedActivities(levelNumber: Int, locale: Locale) -> [LearningActivity] {
-        [
-            activity(
-                id: "level-\(levelNumber)-connections",
-                kind: .guided,
-                titleKey: "activity.connections.title",
-                title: "Make Connections",
-                descriptionKey: "activity.connections.description",
-                description: "Link this level with earlier patterns",
-                items: practiceItems(levelNumber: levelNumber),
-                locale: locale
-            ),
-            activity(
-                id: "level-\(levelNumber)-mixed-reading",
-                kind: .reading,
-                titleKey: "activity.mixed_reading.title",
-                title: "Mixed Reading Practice",
-                descriptionKey: "activity.mixed_reading.description",
-                description: "Read mixed items up to this level",
-                items: practiceItems(levelNumber: levelNumber),
-                locale: locale
-            ),
-            activity(
-                id: "level-\(levelNumber)-mixed-listening",
-                kind: .listening,
-                titleKey: "activity.mixed_listening.title",
-                title: "Mixed Listening Practice",
-                descriptionKey: "activity.mixed_listening.description",
-                description: "Recognise mixed audio up to this level",
-                items: practiceItems(levelNumber: levelNumber),
-                locale: locale
-            )
-        ]
+    private struct PracticeContent {
+        let guided: [[String]]?
+        let reading: [[String]]?
+        let listening: [[String]]?
+        let contrasts: [[String]]
+    }
+
+    private struct LevelPracticeContent {
+        let current: PracticeContent?
+        let mixed: PracticeContent?
+    }
+
+    private static func activities(
+        levelNumber: Int,
+        scope: PracticeScope,
+        content: PracticeContent?,
+        locale: Locale
+    ) -> [LearningActivity] {
+        guard let content else { return [] }
+
+        return [
+            content.guided.map {
+                activity(
+                    levelNumber: levelNumber,
+                    scope: scope,
+                    kind: .guided,
+                    itemSections: $0,
+                    contrasts: [],
+                    locale: locale
+                )
+            },
+            content.reading.map {
+                activity(
+                    levelNumber: levelNumber,
+                    scope: scope,
+                    kind: .reading,
+                    itemSections: $0,
+                    contrasts: [],
+                    locale: locale
+                )
+            },
+            content.listening.map {
+                activity(
+                    levelNumber: levelNumber,
+                    scope: scope,
+                    kind: .listening,
+                    itemSections: $0,
+                    contrasts: content.contrasts,
+                    locale: locale
+                )
+            }
+        ].compactMap { $0 }
     }
 
     private static func activity(
-        id: String,
+        levelNumber: Int,
+        scope: PracticeScope,
         kind: ActivityKind,
-        titleKey: StaticString,
-        title: String.LocalizationValue,
-        descriptionKey: StaticString,
-        description: String.LocalizationValue,
-        items: [String],
+        itemSections: [[String]],
+        contrasts: [[String]],
         locale: Locale
     ) -> LearningActivity {
-        LearningActivity(
-            id: id,
+        let copy = activityCopy(scope: scope, kind: kind)
+
+        return LearningActivity(
+            id: "level-\(levelNumber)-\(copy.idSuffix)",
             kind: kind,
-            title: String(localized: titleKey, defaultValue: title, locale: locale),
-            description: String(localized: descriptionKey, defaultValue: description, locale: locale),
-            items: items,
-            contrasts: []
+            title: String(localized: copy.titleKey, defaultValue: copy.title, locale: locale),
+            description: String(
+                localized: copy.descriptionKey,
+                defaultValue: copy.description,
+                locale: locale
+            ),
+            itemSections: itemSections,
+            contrasts: contrasts
         )
     }
 
-    private static func practiceItems(levelNumber: Int) -> [String] {
+    private struct ActivityCopy {
+        let idSuffix: String
+        let titleKey: StaticString
+        let title: String.LocalizationValue
+        let descriptionKey: StaticString
+        let description: String.LocalizationValue
+    }
+
+    private static func activityCopy(scope: PracticeScope, kind: ActivityKind) -> ActivityCopy {
+        switch (scope, kind) {
+        case (.current, .guided):
+            ActivityCopy(
+                idSuffix: "get-familiar",
+                titleKey: "activity.get_familiar.title",
+                title: "Get Familiar",
+                descriptionKey: "activity.get_familiar.description",
+                description: "Learn this level’s pattern"
+            )
+        case (.current, .reading):
+            ActivityCopy(
+                idSuffix: "reading",
+                titleKey: "activity.reading.title",
+                title: "Reading Practice",
+                descriptionKey: "activity.reading.description",
+                description: "Practise symbols introduced in this level"
+            )
+        case (.current, .listening):
+            ActivityCopy(
+                idSuffix: "listening",
+                titleKey: "activity.listening.title",
+                title: "Listening Practice",
+                descriptionKey: "activity.listening.description",
+                description: "Practise symbols introduced in this level"
+            )
+        case (.mixed, .guided):
+            ActivityCopy(
+                idSuffix: "connections",
+                titleKey: "activity.connections.title",
+                title: "Make Connections",
+                descriptionKey: "activity.connections.description",
+                description: "Link this level with earlier patterns"
+            )
+        case (.mixed, .reading):
+            ActivityCopy(
+                idSuffix: "mixed-reading",
+                titleKey: "activity.mixed_reading.title",
+                title: "Mixed Reading Practice",
+                descriptionKey: "activity.mixed_reading.description",
+                description: "Read mixed items up to this level"
+            )
+        case (.mixed, .listening):
+            ActivityCopy(
+                idSuffix: "mixed-listening",
+                titleKey: "activity.mixed_listening.title",
+                title: "Mixed Listening Practice",
+                descriptionKey: "activity.mixed_listening.description",
+                description: "Recognise mixed audio up to this level"
+            )
+        }
+    }
+
+    private static func practiceContent(levelNumber: Int) -> LevelPracticeContent {
         switch levelNumber {
         case 1:
-            ["ㅏ", "ㅓ", "ㅗ", "ㅜ", "ㅡ", "ㅣ", "아", "어", "오", "우", "으", "이"]
+            LevelPracticeContent(
+                current: PracticeContent(
+                    guided: [
+                        ["ㅏ", "ㅓ", "ㅗ", "ㅜ", "ㅡ", "ㅣ"],
+                        ["아", "어", "오", "우", "으", "이"]
+                    ],
+                    reading: [
+                        ["ㅏ", "ㅓ", "ㅗ", "ㅜ", "ㅡ", "ㅣ"],
+                        ["아", "어", "오", "우", "으", "이"]
+                    ],
+                    listening: [["아", "어", "오", "우", "으", "이"]],
+                    contrasts: [["아", "어"], ["오", "우"], ["우", "으"]]
+                ),
+                mixed: nil
+            )
         case 2:
-            ["ㄱ", "ㄴ", "가", "나", "거", "너", "고", "노", "구", "누"]
+            LevelPracticeContent(
+                current: PracticeContent(
+                    guided: [
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"]
+                    ],
+                    reading: [
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"]
+                    ],
+                    listening: [
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"]
+                    ],
+                    contrasts: [
+                        ["가", "나"], ["거", "너"], ["고", "노"],
+                        ["구", "누"], ["그", "느"], ["기", "니"]
+                    ]
+                ),
+                mixed: PracticeContent(
+                    guided: [
+                        ["아", "가", "나"], ["어", "거", "너"],
+                        ["오", "고", "노"], ["우", "구", "누"],
+                        ["으", "그", "느"], ["이", "기", "니"]
+                    ],
+                    reading: [
+                        ["아", "어", "오", "우", "으", "이"],
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"]
+                    ],
+                    listening: [
+                        ["아", "어", "오", "우", "으", "이"],
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"]
+                    ],
+                    contrasts: [
+                        ["아", "가"], ["가", "나"], ["아", "나"],
+                        ["어", "거"], ["거", "너"], ["어", "너"],
+                        ["오", "고"], ["고", "노"], ["오", "노"],
+                        ["우", "구"], ["구", "누"], ["우", "누"],
+                        ["으", "그"], ["그", "느"], ["으", "느"],
+                        ["이", "기"], ["기", "니"], ["이", "니"]
+                    ]
+                )
+            )
+        default:
+            placeholderPracticeContent(levelNumber: levelNumber)
+        }
+    }
+
+    // Levels 3–9 keep the UI populated until their activity-by-activity mock data is defined.
+    private static func placeholderPracticeContent(levelNumber: Int) -> LevelPracticeContent {
+        let sections = [placeholderItems(levelNumber: levelNumber)]
+        let content = PracticeContent(
+            guided: sections,
+            reading: sections,
+            listening: sections,
+            contrasts: []
+        )
+
+        return LevelPracticeContent(current: content, mixed: content)
+    }
+
+    private static func placeholderItems(levelNumber: Int) -> [String] {
+        switch levelNumber {
         case 3:
             ["ㄷ", "ㄹ", "다", "라", "더", "러", "도", "로", "두", "루"]
         case 4:

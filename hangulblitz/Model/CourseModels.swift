@@ -39,8 +39,12 @@ struct LearningActivity: Identifiable {
     let kind: ActivityKind
     let title: String
     let description: String
-    let items: [String]
+    let itemSections: [[String]]
     let contrasts: [[String]]
+
+    var items: [String] {
+        itemSections.flatMap { $0 }
+    }
 }
 
 enum ActivityKind {

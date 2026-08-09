@@ -59,7 +59,7 @@ struct LevelActivitiesContent: View {
 //                }
 
                 LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
-                    OverviewCard (cardPresentation: activityCardPresentation) {
+                    OverviewCard(cardPresentation: activityCardPresentation) {
                         onOpenRoute(.overview(level.id))
                     }
                 }
@@ -107,31 +107,46 @@ private struct OverviewCard: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("activity.overview.title", comment: "Title of the level overview activity.")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-
-                if cardPresentation == .gridCard {
-                    HStack(spacing: 4) {
-                        Text("activity.overview.action.read", comment: "Action text shown on the overview card on wider layouts.")
-
-                        Image(systemName: "chevron.right")
-                            .imageScale(.small)
-                    }
-                    .font(.headline)
-                    .foregroundStyle(.tint)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(16)
-            .background(Color(.secondarySystemGroupedBackground))
-            .clipShape(.rect(cornerRadius: 16))
+            content
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(16)
+                .background(Color(.secondarySystemGroupedBackground))
+                .clipShape(.rect(cornerRadius: 16))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(
             Text("activity.overview.title", comment: "Title of the level overview activity.")
         )
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch cardPresentation {
+        case .listRow:
+            HStack(alignment: .center, spacing: 8) {
+                ActivityLeadingIcon(systemName: "book.fill")
+                title
+            }
+        case .gridCard:
+            VStack(alignment: .leading, spacing: 8) {
+                title
+
+                HStack(spacing: 4) {
+                    Text("activity.overview.action.read", comment: "Action text shown on the overview card on wider layouts.")
+
+                    Image(systemName: "chevron.right")
+                        .imageScale(.small)
+                }
+                .font(.headline)
+                .foregroundStyle(.tint)
+            }
+        }
+    }
+
+    private var title: some View {
+        Text("activity.overview.title", comment: "Title of the level overview activity.")
+            .font(.headline)
+            .foregroundStyle(.primary)
     }
 }
 

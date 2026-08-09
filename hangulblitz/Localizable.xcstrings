@@ -375,6 +375,7 @@
     },
     "guided.instruction" : {
       "comment" : "Instruction shown at the top of a guided practice flashcard.",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -386,6 +387,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "看 – 听 – 跟读"
+          }
+        }
+      }
+    },
+    "guided.instruction.section.format" : {
+      "comment" : "Guided flashcard instruction. The first number is the current section and the second is the total section count.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Look – Listen – Read aloud (%1$lld/%2$lld)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看 – 听 – 跟读（%1$lld/%2$lld）"
           }
         }
       }
@@ -567,6 +585,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "关闭练习"
+          }
+        }
+      }
+    },
+    "practice.finish" : {
+      "comment" : "Button that completes a practice session from its final card.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
           }
         }
       }
