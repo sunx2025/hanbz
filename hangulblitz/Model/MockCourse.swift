@@ -43,11 +43,6 @@ enum MockCourse {
         )
     }
 
-    private enum PracticeScope {
-        case current
-        case mixed
-    }
-
     private struct PracticeContent {
         let guided: [[String]]?
         let reading: [[String]]?
@@ -115,6 +110,7 @@ enum MockCourse {
         return LearningActivity(
             id: "level-\(levelNumber)-\(copy.idSuffix)",
             kind: kind,
+            scope: scope,
             title: String(localized: copy.titleKey, defaultValue: copy.title, locale: locale),
             description: String(
                 localized: copy.descriptionKey,

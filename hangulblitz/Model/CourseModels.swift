@@ -37,6 +37,7 @@ struct Overview {}
 struct LearningActivity: Identifiable {
     let id: String
     let kind: ActivityKind
+    let scope: PracticeScope
     let title: String
     let description: String
     let itemSections: [[String]]
@@ -45,6 +46,11 @@ struct LearningActivity: Identifiable {
     var items: [String] {
         itemSections.flatMap { $0 }
     }
+}
+
+enum PracticeScope {
+    case current
+    case mixed
 }
 
 enum ActivityKind {
