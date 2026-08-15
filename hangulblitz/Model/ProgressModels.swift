@@ -6,7 +6,9 @@
 import Foundation
 
 enum ProgressPolicy {
-    static let maximumAttemptHistory = 5
+    nonisolated static let maximumAttemptHistory = 5
+    nonisolated static let readingTimeout: TimeInterval = 6
+    nonisolated static let blitzThreshold = 5.5
 }
 
 struct User: Identifiable {
@@ -88,6 +90,7 @@ struct ReadingItemProgress {
     mutating func record(_ attempt: ReadingAttempt) {
         attempts.append(attempt)
         attempts.keepMostRecent(ProgressPolicy.maximumAttemptHistory)
+        mastery = attempts.map(\.score).average
     }
 }
 
@@ -108,9 +111,30 @@ struct ReadingAttempt {
     let recallTime: TimeInterval
     let timeoutThreshold: TimeInterval
     let recordedAt: Date
+
+    var score: Double {
+        guard outcome == .correct else { return 0 }
+
+        switch recallTime {
+        case ..<1:
+            return 6
+        case ..<2:
+            return 5
+        case ..<3:
+            return 4
+        case ..<4:
+            return 3
+        case ..<5:
+            return 2
+        case ..<timeoutThreshold:
+            return 1
+        default:
+            return 0
+        }
+    }
 }
 
-enum ReadingAttemptOutcome {
+enum ReadingAttemptOutcome: Equatable {
     case correct
     case incorrect
     case timedOut
@@ -148,7 +172,10 @@ struct ActivityProgress {
         state: LevelLearningState
     ) {
         let itemIDs = Set(
-            activity.items.map { LevelItemID(levelID: levelID, text: $0) }
+            activity.items
+                .map(PracticeAudioCatalog.normalizedText)
+                .filter { !$0.isEmpty }
+                .map { LevelItemID(levelID: levelID, text: $0) }
         )
 
         totalItemCount = itemIDs.count

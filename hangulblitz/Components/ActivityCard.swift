@@ -8,16 +8,25 @@ import SwiftUI
 struct ActivityCard: View {
     let activity: LearningActivity
     let presentation: Presentation
+    let progress: ActivityDisplayProgress?
     let action: () -> Void
-
-    private var progress: ActivityDisplayProgress? {
-        MockProgress.activity(activity.id)
-    }
 
     // Card layout is different between narrower and wider screens
     enum Presentation {
         case listRow // show as list items on narrower screens
         case gridCard // show as larger card items on wider screens
+    }
+
+    init(
+        activity: LearningActivity,
+        presentation: Presentation,
+        progress: ActivityDisplayProgress? = nil,
+        action: @escaping () -> Void
+    ) {
+        self.activity = activity
+        self.presentation = presentation
+        self.progress = progress
+        self.action = action
     }
 
     var body: some View {
@@ -135,8 +144,16 @@ struct ActivityLeadingIcon: View {
             Text("Without call to action")
                 .font(.headline)
 
-            ActivityCard(activity: completed, presentation: .listRow) {}
-            ActivityCard(activity: scored, presentation: .listRow) {}
+            ActivityCard(
+                activity: completed,
+                presentation: .listRow,
+                progress: MockProgress.activity(completed.id)
+            ) {}
+            ActivityCard(
+                activity: scored,
+                presentation: .listRow,
+                progress: MockProgress.activity(scored.id)
+            ) {}
             ActivityCard(activity: notStarted, presentation: .listRow) {}
 
             Text("With call to action")
@@ -144,7 +161,11 @@ struct ActivityLeadingIcon: View {
                 .padding(.top, 8)
 
             ActivityCard(activity: notStarted, presentation: .gridCard) {}
-            ActivityCard(activity: scored, presentation: .gridCard) {}
+            ActivityCard(
+                activity: scored,
+                presentation: .gridCard,
+                progress: MockProgress.activity(scored.id)
+            ) {}
         }
         .padding(16)
     }

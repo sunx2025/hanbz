@@ -7,13 +7,19 @@ import SwiftUI
 
 struct AudioPlaybackIndicator: View {
     let isPlaying: Bool
+    var isLoading = false
     let samples: [CGFloat]
     let romanization: String
     let replay: () -> Void
 
     var body: some View {
         Group {
-            if isPlaying {
+            if isLoading {
+                ProgressView()
+                    .controlSize(.small)
+                    .frame(height: 40)
+                    .transition(.opacity)
+            } else if isPlaying {
                 VStack(spacing: 8) {
                     AudioWaveform(samples: samples)
                         .frame(height: 40)
@@ -36,6 +42,7 @@ struct AudioPlaybackIndicator: View {
         }
         .frame(maxWidth: .infinity, minHeight: 80)
         .animation(.easeInOut(duration: 0.18), value: isPlaying)
+        .animation(.easeInOut(duration: 0.18), value: isLoading)
     }
 }
 

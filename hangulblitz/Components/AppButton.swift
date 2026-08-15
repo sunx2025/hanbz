@@ -109,6 +109,71 @@ struct AppButton<Label: View>: View {
     }
 }
 
+/// A filled app button with a purely visual remaining-time layer. The practice
+/// session owns the clock and timeout decision; this component only renders the
+/// supplied fraction so animation frame rate can never change a score.
+struct TimedAppButton<Label: View>: View {
+    let remainingFraction: Double
+    let size: AppButtonSize
+    let width: AppButtonWidth
+    let action: () -> Void
+
+    private let label: Label
+
+    init(
+        remainingFraction: Double,
+        size: AppButtonSize = .large,
+        width: AppButtonWidth = .fill,
+        action: @escaping () -> Void,
+        @ViewBuilder label: () -> Label
+    ) {
+        self.remainingFraction = remainingFraction
+        self.size = size
+        self.width = width
+        self.action = action
+        self.label = label()
+    }
+
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                GeometryReader { geometry in
+                    HStack(spacing: 0) {
+                        Color.black.opacity(0.1)
+                            .frame(
+                                width: geometry.size.width
+                                    * min(max(remainingFraction, 0), 1)
+                            )
+
+                        Spacer(minLength: 0)
+                    }
+                }
+
+                label
+                    .font(size.font)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, size.horizontalPadding)
+                    .padding(.vertical, 8)
+            }
+            .frame(
+                minWidth: width.minimumWidth,
+                maxWidth: width.maximumWidth,
+                minHeight: size.minimumHeight
+            )
+            .fixedSize(horizontal: false, vertical: true)
+            .clipShape(.capsule)
+        }
+        .buttonStyle(AppButtonAppearance(style: .filled))
+        .accessibilityValue(
+            Text(
+                verbatim: min(max(remainingFraction, 0), 1)
+                    .formatted(.percent.precision(.fractionLength(0)))
+            )
+        )
+    }
+}
+
 private struct AppButtonAppearance: ButtonStyle {
     let style: AppButtonVariant
 
@@ -183,6 +248,10 @@ private extension AppButtonVariant {
                 Text(verbatim: "A longer localised button label")
             }
             .frame(maxWidth: 280)
+
+            TimedAppButton(remainingFraction: 0.72, action: {}) {
+                Text(verbatim: "Check Answer")
+            }
         }
         .padding(24)
     }

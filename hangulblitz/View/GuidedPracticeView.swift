@@ -6,8 +6,11 @@
 import SwiftUI
 
 struct GuidedPracticeView: View {
+    let levelID: String
     let activity: LearningActivity
     let readingActivity: LearningActivity?
+
+    @Binding private var progress: UserProgress
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -17,11 +20,18 @@ struct GuidedPracticeView: View {
     @State private var audioPlayer = PracticeAudioPlayer()
     @State private var isPreparing = true
     @State private var preparationTask: Task<Void, Never>?
-    @State private var showsReadingPlaceholder = false
+    @State private var showsReadingPractice = false
 
-    init(activity: LearningActivity, readingActivity: LearningActivity?) {
+    init(
+        levelID: String,
+        activity: LearningActivity,
+        readingActivity: LearningActivity?,
+        progress: Binding<UserProgress>
+    ) {
+        self.levelID = levelID
         self.activity = activity
         self.readingActivity = readingActivity
+        _progress = progress
         _session = State(initialValue: GuidedPracticeSession(activity: activity))
     }
 
@@ -40,16 +50,20 @@ struct GuidedPracticeView: View {
             } else if session.isComplete {
                 GuidedPracticeCompletionView(
                     canStartReading: readingActivity != nil,
-                    startReading: { showsReadingPlaceholder = true },
+                    startReading: { showsReadingPractice = true },
                     learnAgain: restart
                 )
             } else {
                 practiceContent
             }
         }
-        .navigationDestination(isPresented: $showsReadingPlaceholder) {
+        .navigationDestination(isPresented: $showsReadingPractice) {
             if let readingActivity {
-                ActivityPlaceholderView(title: readingActivity.title)
+                ReadingPracticeView(
+                    levelID: levelID,
+                    activity: readingActivity,
+                    progress: $progress
+                )
             }
         }
         .overlay(alignment: .top) {
@@ -173,7 +187,13 @@ struct GuidedPracticeView: View {
     private func moveNext() {
         audioPlayer.stop()
         session.moveNext()
-        if !session.isComplete {
+        if session.isComplete {
+            progress.markNonScoredActivityCompleted(
+                levelID: levelID,
+                activityID: activity.id
+            )
+            progress.save()
+        } else {
             playCurrentItem()
         }
     }
@@ -511,13 +531,17 @@ private struct GuidedPracticeCompletionView: View {
 }
 
 #Preview("Guided practice") {
+    @Previewable @State var progress = UserProgress()
+
     let locale = Locale(identifier: "en_AU")
     let level = MockCourse.course(locale: locale).levels[0]
 
     NavigationStack {
         GuidedPracticeView(
+            levelID: level.id,
             activity: level.currentActivities[0],
-            readingActivity: level.currentActivities[1]
+            readingActivity: level.currentActivities[1],
+            progress: $progress
         )
     }
     .environment(\.locale, locale)

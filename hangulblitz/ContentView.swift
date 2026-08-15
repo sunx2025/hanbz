@@ -12,12 +12,14 @@ struct ContentView: View {
     @State private var selectedLevelID: String?
     @State private var preferredCompactColumn = NavigationSplitViewColumn.sidebar
     @State private var presentedActivity: PresentedActivity?
+    @State private var progress = UserProgress.load()
 
     var body: some View {
         let course = MockCourse.course(locale: locale)
 
         TabletHomeView(
             course: course,
+            progress: progress,
             selectedLevelID: $selectedLevelID,
             preferredCompactColumn: $preferredCompactColumn,
             onPresentActivity: { levelID, activity in
@@ -83,11 +85,20 @@ struct ContentView: View {
                 .first { $0.kind == .reading }
 
             GuidedPracticeView(
+                levelID: presentedActivity.levelID,
                 activity: presentedActivity.activity,
-                readingActivity: readingActivity
+                readingActivity: readingActivity,
+                progress: $progress
             )
 
-        case .reading, .listening:
+        case .reading:
+            ReadingPracticeView(
+                levelID: presentedActivity.levelID,
+                activity: presentedActivity.activity,
+                progress: $progress
+            )
+
+        case .listening:
             ActivityPlaceholderView(
                 title: presentedActivity.activity.title,
                 showsCloseButton: true

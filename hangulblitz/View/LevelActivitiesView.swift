@@ -7,6 +7,7 @@ import SwiftUI
 
 struct LevelActivitiesView: View {
     let level: Level
+    let progress: UserProgress
     let onOpenRoute: (AppRoute) -> Void
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -16,6 +17,7 @@ struct LevelActivitiesView: View {
         GeometryReader { geometry in
             LevelActivitiesContent(
                 level: level,
+                progress: progress,
                 columnCount: columnCount(for: geometry.size.width),
                 //showsLevelHeading: false,
                 activityCardPresentation: horizontalSizeClass == .compact ? .listRow : .gridCard,
@@ -38,6 +40,7 @@ struct LevelActivitiesView: View {
 
 struct LevelActivitiesContent: View {
     let level: Level
+    let progress: UserProgress
     let columnCount: Int
     //let showsLevelHeading: Bool
     let activityCardPresentation: ActivityCard.Presentation
@@ -86,11 +89,31 @@ struct LevelActivitiesContent: View {
     private func activityGrid(_ activities: [LearningActivity]) -> some View {
         LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
             ForEach(activities) { activity in
-                ActivityCard(activity: activity, presentation: activityCardPresentation) {
+                ActivityCard(
+                    activity: activity,
+                    presentation: activityCardPresentation,
+                    progress: displayProgress(for: activity)
+                ) {
                     onOpenRoute(.activity(levelID: level.id, activityID: activity.id))
                 }
             }
         }
+    }
+
+    private func displayProgress(for activity: LearningActivity) -> ActivityDisplayProgress? {
+        let state = progress.levels[level.id] ?? LevelLearningState()
+        let activityProgress = ActivityProgress(
+            activity: activity,
+            levelID: level.id,
+            state: state
+        )
+
+        guard activityProgress.hasAttempt else { return nil }
+        return ActivityDisplayProgress(
+            hasAttempt: true,
+            isCompleted: activityProgress.isCompleted,
+            score: activityProgress.mastery
+        )
     }
 
     private func sectionTitle(key: LocalizedStringKey, comment: StaticString) -> some View {
@@ -156,6 +179,7 @@ private struct OverviewCard: View {
     NavigationStack {
         LevelActivitiesView(
             level: MockCourse.course(locale: locale).levels[0],
+            progress: UserProgress(),
             onOpenRoute: { _ in }
         )
     }

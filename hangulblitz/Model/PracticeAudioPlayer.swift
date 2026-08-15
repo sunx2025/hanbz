@@ -25,6 +25,7 @@ struct PracticeAudioIssue: Identifiable, Equatable, Sendable {
 @Observable
 final class PracticeAudioPlayer {
     private(set) var isPlaying = false
+    private(set) var isLoading = false
     private(set) var samples: [CGFloat] = Array(repeating: 0.08, count: 40)
     private(set) var audioIssue: PracticeAudioIssue?
 
@@ -34,6 +35,7 @@ final class PracticeAudioPlayer {
     private var preparedUnicodeID: String?
     private var meteringTask: Task<Void, Never>?
     private var loadingTask: Task<Void, Never>?
+    private var playbackCompletion: (() -> Void)?
     private var loadGeneration = 0
 
     private static let logger = Logger(
@@ -55,8 +57,10 @@ final class PracticeAudioPlayer {
 
     /// Resolves, prepares, and plays an item. The shared catalog scans the App
     /// bundle only once per process, then serves subsequent lookups from memory.
-    func play(text: String) {
+    func play(text: String, completion: (() -> Void)? = nil) {
         beginNewLoad(resetSamples: true)
+        playbackCompletion = completion
+        isLoading = true
         let generation = loadGeneration
 
         loadingTask = Task { [weak self] in
@@ -67,15 +71,16 @@ final class PracticeAudioPlayer {
 
     /// Plays an already prepared item, or falls back to a normal lookup if the
     /// prepared player was discarded after a scene or card transition.
-    func playPrepared(text: String) {
+    func playPrepared(text: String, completion: (() -> Void)? = nil) {
         let normalizedText = PracticeAudioCatalog.normalizedText(text)
         guard preparedText == normalizedText,
               let unicodeID = preparedUnicodeID,
               player != nil else {
-            play(text: text)
+            play(text: text, completion: completion)
             return
         }
 
+        playbackCompletion = completion
         audioIssue = nil
         startPreparedPlayback(text: normalizedText, unicodeID: unicodeID)
     }
@@ -85,6 +90,7 @@ final class PracticeAudioPlayer {
         loadingTask?.cancel()
         loadingTask = nil
         resetPlayer(resetSamples: resetSamples)
+        playbackCompletion = nil
         audioIssue = nil
     }
 
@@ -98,6 +104,7 @@ final class PracticeAudioPlayer {
         loadingTask?.cancel()
         loadingTask = nil
         resetPlayer(resetSamples: resetSamples)
+        playbackCompletion = nil
         audioIssue = nil
     }
 
@@ -121,6 +128,7 @@ final class PracticeAudioPlayer {
                 self.player = player
                 preparedText = normalizedText
                 preparedUnicodeID = unicodeID
+                isLoading = false
 
                 if startsPlayback {
                     startPreparedPlayback(text: normalizedText, unicodeID: unicodeID)
@@ -137,6 +145,7 @@ final class PracticeAudioPlayer {
         }
 
         if generation == loadGeneration {
+            isLoading = false
             loadingTask = nil
         }
     }
@@ -164,6 +173,7 @@ final class PracticeAudioPlayer {
             }
 
             audioIssue = nil
+            isLoading = false
             isPlaying = true
             startMetering()
         } catch {
@@ -179,6 +189,7 @@ final class PracticeAudioPlayer {
         preparedText = nil
         preparedUnicodeID = nil
         isPlaying = false
+        isLoading = false
 
         if resetSamples {
             samples = Array(repeating: 0.08, count: 40)
@@ -200,6 +211,7 @@ final class PracticeAudioPlayer {
             isPlaying = false
             meteringTask?.cancel()
             meteringTask = nil
+            completePlayback()
             return
         }
 
@@ -207,6 +219,7 @@ final class PracticeAudioPlayer {
             isPlaying = false
             meteringTask?.cancel()
             meteringTask = nil
+            completePlayback()
             return
         }
 
@@ -222,6 +235,7 @@ final class PracticeAudioPlayer {
     }
 
     private func reportMissing(text: String, unicodeID: String) {
+        let completion = playbackCompletion
         resetPlayer(resetSamples: false)
         audioIssue = PracticeAudioIssue(
             kind: .missing,
@@ -230,9 +244,12 @@ final class PracticeAudioPlayer {
             filenames: []
         )
         Self.logger.error("Audio missing: \(text, privacy: .public) (\(unicodeID, privacy: .public))")
+        playbackCompletion = nil
+        completion?()
     }
 
     private func reportDuplicate(text: String, unicodeID: String, urls: [URL]) {
+        let completion = playbackCompletion
         resetPlayer(resetSamples: false)
         let filenames = urls.map(\.lastPathComponent)
         audioIssue = PracticeAudioIssue(
@@ -244,5 +261,13 @@ final class PracticeAudioPlayer {
         Self.logger.error(
             "Duplicate audio: \(text, privacy: .public) (\(unicodeID, privacy: .public)): \(filenames.joined(separator: ", "), privacy: .public)"
         )
+        playbackCompletion = nil
+        completion?()
+    }
+
+    private func completePlayback() {
+        let completion = playbackCompletion
+        playbackCompletion = nil
+        completion?()
     }
 }

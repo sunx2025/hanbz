@@ -7,6 +7,7 @@ import SwiftUI
 
 struct TabletHomeView<SidebarMenu: View>: View {
     let course: Course
+    let progress: UserProgress
     @Binding var selectedLevelID: String?
     @Binding var preferredCompactColumn: NavigationSplitViewColumn
     let onPresentActivity: (String, LearningActivity) -> Void
@@ -18,12 +19,14 @@ struct TabletHomeView<SidebarMenu: View>: View {
 
     init(
         course: Course,
+        progress: UserProgress,
         selectedLevelID: Binding<String?>,
         preferredCompactColumn: Binding<NavigationSplitViewColumn>,
         onPresentActivity: @escaping (String, LearningActivity) -> Void,
         @ViewBuilder sidebarMenu: () -> SidebarMenu
     ) {
         self.course = course
+        self.progress = progress
         _selectedLevelID = selectedLevelID
         _preferredCompactColumn = preferredCompactColumn
         self.onPresentActivity = onPresentActivity
@@ -56,6 +59,7 @@ struct TabletHomeView<SidebarMenu: View>: View {
                 if let selectedLevel {
                     LevelActivitiesView(
                         level: selectedLevel,
+                        progress: progress,
                         onOpenRoute: open
                     )
                     .id(selectedLevel.id)
