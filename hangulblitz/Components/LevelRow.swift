@@ -7,6 +7,7 @@ import SwiftUI
 
 struct LevelRow: View {
     let level: Level
+    let progress: LevelDisplayProgress?
     var isSelected = false
     var presentation: Presentation = .card
 
@@ -26,13 +27,11 @@ struct LevelRow: View {
                 .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
                 .lineLimit(2)
 
-            if let progress = MockProgress.level(level.id) {
-                MasteryIndicator(
-                    value: progress.mastery,
-                    shape: .star,
-                    showsBlitz: progress.isBlitz
+            if let progress {
+                LevelProgressIndicator(
+                    progress: progress.standardProgress,
+                    isBlitz: progress.isBlitz
                 )
-                .padding(.top, 1)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

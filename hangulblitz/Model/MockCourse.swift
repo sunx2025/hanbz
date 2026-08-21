@@ -247,12 +247,53 @@ enum MockCourse {
                     ]
                 )
             )
+        case 3:
+            LevelPracticeContent(
+                current: PracticeContent(
+                    guided: [
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"],
+                        ["다", "라", "더", "러"],
+                        ["도", "로", "두", "루"],
+                        ["드", "르", "디", "리"]
+                    ],
+                    reading: [
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"]
+                    ],
+                    listening: [
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"]
+                    ],
+                    contrasts: []
+                ),
+                mixed: PracticeContent(
+                    guided: [
+                        ["가", "나", "다", "라"], ["거", "너", "더", "러"],
+                        ["고", "노", "도", "로"], ["구", "누", "두", "루"],
+                        ["그", "느", "드", "르"], ["기", "니", "디", "리"]
+                    ],
+                    reading: [
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"],
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"]
+                    ],
+                    listening: [
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"],
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"]
+                    ],
+                    contrasts: []
+                )
+            )
         default:
             placeholderPracticeContent(levelNumber: levelNumber)
         }
     }
 
-    // Levels 3–9 keep the UI populated until their activity-by-activity mock data is defined.
+    // Levels 4–9 keep the UI populated until their activity-by-activity mock data is defined.
     private static func placeholderPracticeContent(levelNumber: Int) -> LevelPracticeContent {
         let sections = [placeholderItems(levelNumber: levelNumber)]
         let content = PracticeContent(
@@ -267,8 +308,6 @@ enum MockCourse {
 
     private static func placeholderItems(levelNumber: Int) -> [String] {
         switch levelNumber {
-        case 3:
-            ["ㄷ", "ㄹ", "다", "라", "더", "러", "도", "로", "두", "루"]
         case 4:
             ["ㅁ", "ㅂ", "마", "바", "머", "버", "모", "보", "무", "부"]
         case 5:

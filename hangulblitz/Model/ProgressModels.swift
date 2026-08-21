@@ -7,7 +7,15 @@ import Foundation
 
 enum ProgressPolicy {
     nonisolated static let maximumAttemptHistory = 5
+    // Five points fills the normal mastery UI. Scores above this remain useful
+    // for distinguishing exceptionally fast recall, but cannot add more than
+    // 100% to an activity's contribution to its level.
+    nonisolated static let masteryFullScore = 5.0
     nonisolated static let readingTimeout: TimeInterval = 6
+    nonisolated static let listeningTimeout: TimeInterval = 6
+    nonisolated static let listeningMinimumAnswerProgress = 0.5
+    nonisolated static let listeningCorrectFeedbackDuration: TimeInterval = 0.8
+    nonisolated static let listeningOtherFeedbackDuration: TimeInterval = 1
     nonisolated static let blitzThreshold = 5.5
 }
 
@@ -101,6 +109,7 @@ struct ListeningItemProgress {
     mutating func record(_ attempt: ListeningAttempt) {
         attempts.append(attempt)
         attempts.keepMostRecent(ProgressPolicy.maximumAttemptHistory)
+        mastery = attempts.map(\.score).average
     }
 }
 
@@ -147,9 +156,30 @@ struct ListeningAttempt {
     let responseTime: TimeInterval
     let timeoutThreshold: TimeInterval
     let recordedAt: Date
+
+    var score: Double {
+        guard outcome == .correct else { return 0 }
+
+        switch responseTime {
+        case ..<1:
+            return 6
+        case ..<2:
+            return 5
+        case ..<3:
+            return 4
+        case ..<4:
+            return 3
+        case ..<5:
+            return 2
+        case ..<timeoutThreshold:
+            return 1
+        default:
+            return 0
+        }
+    }
 }
 
-enum ListeningAttemptOutcome {
+enum ListeningAttemptOutcome: Equatable {
     case correct
     case incorrect
     case notSure
@@ -198,7 +228,7 @@ struct ActivityProgress {
 
         switch activity.kind {
         case .reading:
-            masteryValues = itemProgresses.compactMap { $0?.reading.mastery }
+            masteryValues = itemProgresses.map { $0?.reading.mastery ?? 0 }
             practisedItems = itemProgresses.map { progress in
                 !(progress?.reading.attempts.isEmpty ?? true)
             }
@@ -207,7 +237,7 @@ struct ActivityProgress {
             }
 
         case .listening:
-            masteryValues = itemProgresses.compactMap { $0?.listening.mastery }
+            masteryValues = itemProgresses.map { $0?.listening.mastery ?? 0 }
             practisedItems = itemProgresses.map { progress in
                 !(progress?.listening.attempts.isEmpty ?? true)
             }
@@ -221,8 +251,12 @@ struct ActivityProgress {
             scopeEvidenceItems = []
         }
 
-        mastery = masteryValues.average
         practisedItemCount = practisedItems.count(where: { $0 })
+        // Once an activity has evidence, every configured item contributes to
+        // mastery. Unpractised items count as zero so a partial session cannot
+        // make the whole activity appear mastered. With no evidence at all the
+        // optional remains nil, allowing the UI to hide an untouched activity.
+        mastery = practisedItemCount > 0 ? masteryValues.average : nil
         coverage = Self.ratio(practisedItemCount, to: totalItemCount)
         scopeEvidenceCoverage = Self.ratio(
             scopeEvidenceItems.count(where: { $0 }),
@@ -240,7 +274,14 @@ struct ActivityProgress {
 
 // Level progress is a snapshot derived from its scored activities.
 struct LevelProgress {
-    let mastery: Double?
+    // Normal progress and Blitz deliberately express different achievements.
+    // Each activity first caps at 100% (score 5) before the level average is
+    // calculated. Its score above 5 therefore cannot compensate for another
+    // activity below 5. Level Blitz is awarded separately only when every
+    // valid scored activity has itself reached the Blitz threshold.
+    let standardProgress: Double?
+    let isBlitz: Bool
+    let hasAttempt: Bool
     let coverage: Double
     let activityProgresses: [String: ActivityProgress]
 
@@ -259,8 +300,24 @@ struct LevelProgress {
             }
 
         activityProgresses = Dictionary(uniqueKeysWithValues: progresses)
-        mastery = activityProgresses.values.compactMap(\.mastery).average
-        coverage = Array(activityProgresses.values.map(\.coverage)).average ?? 0
+
+        // An empty scored activity is invalid course content, so it cannot
+        // dilute the level by entering either numerator or denominator.
+        let validProgresses = activityProgresses.values.filter { $0.totalItemCount > 0 }
+        hasAttempt = validProgresses.contains(where: \.hasAttempt)
+
+        let activityFractions = validProgresses.map { progress in
+            guard progress.hasAttempt else { return 0.0 }
+            let score = progress.mastery ?? 0
+            return min(max(score / ProgressPolicy.masteryFullScore, 0), 1)
+        }
+        standardProgress = hasAttempt ? activityFractions.average : nil
+
+        isBlitz = !validProgresses.isEmpty && validProgresses.allSatisfy { progress in
+            progress.hasAttempt &&
+                (progress.mastery ?? 0) >= ProgressPolicy.blitzThreshold
+        }
+        coverage = validProgresses.map(\.coverage).average ?? 0
     }
 }
 

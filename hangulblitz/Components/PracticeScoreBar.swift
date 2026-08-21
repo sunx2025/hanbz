@@ -69,8 +69,8 @@ struct PracticeScoreBar: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
             Text(
-                "reading.completion.score.accessibility_label",
-                comment: "Accessibility label for the score position shown on the reading practice completion bar."
+                "practice.completion.score.accessibility_label",
+                comment: "Accessibility label for the score position shown on a scored practice completion bar."
             )
         )
         .accessibilityValue(Text(verbatim: clampedScore.formatted(.number.precision(.fractionLength(1)))))

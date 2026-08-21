@@ -7,6 +7,7 @@ import SwiftUI
 
 struct LevelListView: View {
     let levels: [Level]
+    let progress: UserProgress
     @Binding var selectedLevelID: String?
     let usesCardRows: Bool
 
@@ -15,6 +16,7 @@ struct LevelListView: View {
             NavigationLink(value: level.id) {
                 LevelRow(
                     level: level,
+                    progress: displayProgress(for: level),
                     isSelected: !usesCardRows && level.id == selectedLevelID,
                     presentation: usesCardRows ? .card : .sidebar
                 )
@@ -41,6 +43,22 @@ struct LevelListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationLinkIndicatorVisibility(.hidden)
     }
+
+    private func displayProgress(for level: Level) -> LevelDisplayProgress? {
+        let levelProgress = LevelProgress(
+            level: level,
+            state: progress.levels[level.id] ?? LevelLearningState()
+        )
+
+        guard let standardProgress = levelProgress.standardProgress else {
+            return nil
+        }
+
+        return LevelDisplayProgress(
+            standardProgress: standardProgress,
+            isBlitz: levelProgress.isBlitz
+        )
+    }
 }
 
 #Preview("Level list – Progress states") {
@@ -50,6 +68,7 @@ struct LevelListView: View {
     NavigationSplitView(preferredCompactColumn: $preferredCompactColumn) {
         LevelListView(
             levels: .previewLevels,
+            progress: .previewLevelProgress,
             selectedLevelID: $selectedLevelID,
             usesCardRows: true
             //usesCardRows: false
@@ -65,6 +84,77 @@ struct LevelListView: View {
     .environment(\.locale, Locale(identifier: "en_AU"))
 }
 
+private extension UserProgress {
+    static var previewLevelProgress: UserProgress {
+        var progress = UserProgress()
+        let sessionID = UUID()
+
+        progress.record(
+            ReadingAttempt(
+                sessionID: sessionID,
+                scope: .current,
+                outcome: .correct,
+                recallTime: 5.5,
+                timeoutThreshold: ProgressPolicy.readingTimeout,
+                recordedAt: .now
+            ),
+            levelID: "level-1",
+            text: "아"
+        )
+        progress.record(
+            ListeningAttempt(
+                sessionID: sessionID,
+                scope: .current,
+                outcome: .correct,
+                responseTime: 5.5,
+                timeoutThreshold: ProgressPolicy.listeningTimeout,
+                recordedAt: .now
+            ),
+            levelID: "level-1",
+            text: "아"
+        )
+        progress.record(
+            ListeningAttempt(
+                sessionID: sessionID,
+                scope: .current,
+                outcome: .incorrect,
+                responseTime: 3,
+                timeoutThreshold: ProgressPolicy.listeningTimeout,
+                recordedAt: .now
+            ),
+            levelID: "level-1",
+            text: "아"
+        )
+
+        progress.record(
+            ReadingAttempt(
+                sessionID: sessionID,
+                scope: .current,
+                outcome: .correct,
+                recallTime: 0.5,
+                timeoutThreshold: ProgressPolicy.readingTimeout,
+                recordedAt: .now
+            ),
+            levelID: "level-2",
+            text: "아"
+        )
+        progress.record(
+            ListeningAttempt(
+                sessionID: sessionID,
+                scope: .current,
+                outcome: .correct,
+                responseTime: 0.5,
+                timeoutThreshold: ProgressPolicy.listeningTimeout,
+                recordedAt: .now
+            ),
+            levelID: "level-2",
+            text: "아"
+        )
+
+        return progress
+    }
+}
+
 private extension Array where Element == Level {
     static var previewLevels: [Level] {
         [
@@ -72,13 +162,15 @@ private extension Array where Element == Level {
                 id: "level-1",
                 number: 1,
                 title: "Basic Vowels",
-                description: "ㅏ ㅓ ㅗ ㅜ ㅡ ㅣ and silent initial ㅇ"
+                description: "ㅏ ㅓ ㅗ ㅜ ㅡ ㅣ and silent initial ㅇ",
+                includesActivities: true
             ),
             Level.preview(
                 id: "level-2",
                 number: 2,
                 title: "Basic Consonants ㄱ ㄴ",
-                description: "ㄱ ㄴ and combinations"
+                description: "ㄱ ㄴ and combinations",
+                includesActivities: true
             ),
             Level.preview(
                 id: "level-preview-3",
@@ -107,15 +199,35 @@ private extension Level {
         id: String,
         number: Int,
         title: String,
-        description: String
+        description: String,
+        includesActivities: Bool = false
     ) -> Level {
-        Level(
+        let reading = LearningActivity(
+            id: "\(id)-reading",
+            kind: .reading,
+            scope: .current,
+            title: "Reading Practice",
+            description: "",
+            itemSections: includesActivities ? [["아"]] : [],
+            contrasts: []
+        )
+        let listening = LearningActivity(
+            id: "\(id)-listening",
+            kind: .listening,
+            scope: .current,
+            title: "Listening Practice",
+            description: "",
+            itemSections: includesActivities ? [["아"]] : [],
+            contrasts: []
+        )
+
+        return Level(
             id: id,
             number: number,
             title: title,
             description: description,
             overview: nil,
-            currentActivities: [],
+            currentActivities: includesActivities ? [reading, listening] : [],
             mixedActivities: []
         )
     }

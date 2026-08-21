@@ -8,7 +8,7 @@
 import Foundation
 
 struct LevelDisplayProgress {
-    let mastery: Double
+    let standardProgress: Double
     let isBlitz: Bool
 }
 
@@ -22,9 +22,9 @@ enum MockProgress {
     static func level(_ levelID: String) -> LevelDisplayProgress? {
         switch levelID {
         case "level-1":
-            LevelDisplayProgress(mastery: 2.5, isBlitz: false)
+            LevelDisplayProgress(standardProgress: 0.15, isBlitz: false)
         case "level-2":
-            LevelDisplayProgress(mastery: 5, isBlitz: true)
+            LevelDisplayProgress(standardProgress: 1, isBlitz: true)
         default:
             nil
         }

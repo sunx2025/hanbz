@@ -9,7 +9,7 @@ struct AudioPlaybackIndicator: View {
     let isPlaying: Bool
     var isLoading = false
     let samples: [CGFloat]
-    let romanization: String
+    var romanization: String? = nil
     let replay: () -> Void
 
     var body: some View {
@@ -24,9 +24,11 @@ struct AudioPlaybackIndicator: View {
                     AudioWaveform(samples: samples)
                         .frame(height: 40)
 
-                    Text(verbatim: romanization)
-                        .font(.title2)
-                        .foregroundStyle(.primary)
+                    if let romanization, !romanization.isEmpty {
+                        Text(verbatim: romanization)
+                            .font(.title2)
+                            .foregroundStyle(.primary)
+                    }
                 }
                 .transition(.opacity)
             } else {

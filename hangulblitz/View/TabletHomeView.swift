@@ -41,6 +41,7 @@ struct TabletHomeView<SidebarMenu: View>: View {
         NavigationSplitView(preferredCompactColumn: $preferredCompactColumn) {
             LevelListView(
                 levels: course.levels,
+                progress: progress,
                 selectedLevelID: $selectedLevelID,
                 usesCardRows: horizontalSizeClass == .compact
             )

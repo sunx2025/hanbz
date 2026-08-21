@@ -27,6 +27,7 @@ final class PracticeAudioPlayer {
     private(set) var isPlaying = false
     private(set) var isLoading = false
     private(set) var samples: [CGFloat] = Array(repeating: 0.08, count: 40)
+    private(set) var playbackProgress = 0.0
     private(set) var audioIssue: PracticeAudioIssue?
 
     private let audioCatalog: PracticeAudioCatalog
@@ -164,6 +165,7 @@ final class PracticeAudioPlayer {
             meteringTask?.cancel()
             meteringTask = nil
             samples = Array(repeating: 0.08, count: 40)
+            playbackProgress = 0
             player.stop()
             player.currentTime = 0
 
@@ -190,6 +192,7 @@ final class PracticeAudioPlayer {
         preparedUnicodeID = nil
         isPlaying = false
         isLoading = false
+        playbackProgress = 0
 
         if resetSamples {
             samples = Array(repeating: 0.08, count: 40)
@@ -216,6 +219,7 @@ final class PracticeAudioPlayer {
         }
 
         guard player.isPlaying else {
+            playbackProgress = 1
             isPlaying = false
             meteringTask?.cancel()
             meteringTask = nil
@@ -224,6 +228,9 @@ final class PracticeAudioPlayer {
         }
 
         player.updateMeters()
+        if player.duration > 0 {
+            playbackProgress = min(max(player.currentTime / player.duration, 0), 1)
+        }
         let decibels = player.averagePower(forChannel: 0)
         let linearPower = pow(10, Double(decibels) / 20)
         let visuallyBoostedPower = min(max(pow(linearPower, 0.45), 0.06), 1)

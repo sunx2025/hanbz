@@ -99,9 +99,10 @@ struct ContentView: View {
             )
 
         case .listening:
-            ActivityPlaceholderView(
-                title: presentedActivity.activity.title,
-                showsCloseButton: true
+            ListeningPracticeView(
+                levelID: presentedActivity.levelID,
+                activity: presentedActivity.activity,
+                progress: $progress
             )
         }
     }
