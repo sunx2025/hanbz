@@ -6,11 +6,13 @@
 import SwiftUI
 
 struct BrandLogo: View {
+    var width: CGFloat = 121
+
     var body: some View {
         Image("HB Logo")
             .resizable()
             .scaledToFit()
-            .frame(width: 121)
+            .frame(width: width)
             .accessibilityLabel("Hangul Blitz")
     }
 }

@@ -62,7 +62,7 @@ struct LevelListView: View {
 }
 
 #Preview("Level list – Progress states") {
-    @Previewable @State var selectedLevelID: String? = "level-1"
+    @Previewable @State var selectedLevelID: String? = "basic-vowels"
     @Previewable @State var preferredCompactColumn = NavigationSplitViewColumn.sidebar
 
     NavigationSplitView(preferredCompactColumn: $preferredCompactColumn) {
@@ -98,7 +98,7 @@ private extension UserProgress {
                 timeoutThreshold: ProgressPolicy.readingTimeout,
                 recordedAt: .now
             ),
-            levelID: "level-1",
+            levelID: "basic-vowels",
             text: "아"
         )
         progress.record(
@@ -110,7 +110,7 @@ private extension UserProgress {
                 timeoutThreshold: ProgressPolicy.listeningTimeout,
                 recordedAt: .now
             ),
-            levelID: "level-1",
+            levelID: "basic-vowels",
             text: "아"
         )
         progress.record(
@@ -122,7 +122,7 @@ private extension UserProgress {
                 timeoutThreshold: ProgressPolicy.listeningTimeout,
                 recordedAt: .now
             ),
-            levelID: "level-1",
+            levelID: "basic-vowels",
             text: "아"
         )
 
@@ -135,7 +135,7 @@ private extension UserProgress {
                 timeoutThreshold: ProgressPolicy.readingTimeout,
                 recordedAt: .now
             ),
-            levelID: "level-2",
+            levelID: "open-syllables-g-n",
             text: "아"
         )
         progress.record(
@@ -147,7 +147,7 @@ private extension UserProgress {
                 timeoutThreshold: ProgressPolicy.listeningTimeout,
                 recordedAt: .now
             ),
-            levelID: "level-2",
+            levelID: "open-syllables-g-n",
             text: "아"
         )
 
@@ -159,33 +159,33 @@ private extension Array where Element == Level {
     static var previewLevels: [Level] {
         [
             Level.preview(
-                id: "level-1",
+                id: "basic-vowels",
                 number: 1,
                 title: "Basic Vowels",
                 description: "ㅏ ㅓ ㅗ ㅜ ㅡ ㅣ and silent initial ㅇ",
                 includesActivities: true
             ),
             Level.preview(
-                id: "level-2",
+                id: "open-syllables-g-n",
                 number: 2,
                 title: "Basic Consonants ㄱ ㄴ",
                 description: "ㄱ ㄴ and combinations",
                 includesActivities: true
             ),
             Level.preview(
-                id: "level-preview-3",
+                id: "open-syllables-d-r",
                 number: 3,
                 title: "Basic Consonants ㄷ ㄹ",
                 description: "ㄷ ㄹ and combinations"
             ),
             Level.preview(
-                id: "level-preview-4",
+                id: "open-syllables-m-b",
                 number: 4,
                 title: "Basic Consonants ㅁ ㅂ",
                 description: "ㅁ ㅂ and combinations"
             ),
             Level.preview(
-                id: "level-preview-5",
+                id: "basic-open-syllables-transfer-1",
                 number: 5,
                 title: "Mixed Practice I",
                 description: "가 거 고 구 그 기 etc."

@@ -6,34 +6,53 @@
 //
 
 import Foundation
+import OSLog
 
 enum MockCourse {
-    static let levelOneID = "level-1"
+    static let levelIDs = [
+        "basic-vowels",
+        "open-syllables-g-n",
+        "open-syllables-d-r",
+        "open-syllables-m-b",
+        "basic-open-syllables-transfer-1",
+        "y-vowels",
+        "y-vowels-transfer",
+        "open-syllables-s-j-h",
+        "basic-open-syllables-transfer-2"
+    ]
+
+    static let levelOneID = levelIDs[0]
 
     static func course(locale: Locale) -> Course {
         let usesSimplifiedChinese = locale.language.languageCode?.identifier == "zh"
         let content = usesSimplifiedChinese ? chineseContent : englishContent
+        let localizedContent = usesSimplifiedChinese
+            ? simplifiedChineseCourseContent
+            : englishCourseContent
+        precondition(content.count == levelIDs.count)
 
         return Course(
             id: "hangul-foundations",
             levels: content.enumerated().map { index, copy in
                 let levelNumber = index + 1
+                let levelID = levelIDs[index]
                 let practice = practiceContent(levelNumber: levelNumber)
+                let localizedLevel = localizedContent[levelID]
 
                 return Level(
-                    id: "level-\(levelNumber)",
+                    id: levelID,
                     number: levelNumber,
-                    title: copy.title,
-                    description: copy.description,
-                    overview: Overview(),
+                    title: localizedLevel?.title ?? copy.title,
+                    description: localizedLevel?.description ?? copy.description,
+                    overview: localizedLevel?.overview,
                     currentActivities: activities(
-                        levelNumber: levelNumber,
+                        levelID: levelID,
                         scope: .current,
                         content: practice.current,
                         locale: locale
                     ),
                     mixedActivities: activities(
-                        levelNumber: levelNumber,
+                        levelID: levelID,
                         scope: .mixed,
                         content: practice.mixed,
                         locale: locale
@@ -56,7 +75,7 @@ enum MockCourse {
     }
 
     private static func activities(
-        levelNumber: Int,
+        levelID: String,
         scope: PracticeScope,
         content: PracticeContent?,
         locale: Locale
@@ -66,7 +85,7 @@ enum MockCourse {
         return [
             content.guided.map {
                 activity(
-                    levelNumber: levelNumber,
+                    levelID: levelID,
                     scope: scope,
                     kind: .guided,
                     itemSections: $0,
@@ -76,7 +95,7 @@ enum MockCourse {
             },
             content.reading.map {
                 activity(
-                    levelNumber: levelNumber,
+                    levelID: levelID,
                     scope: scope,
                     kind: .reading,
                     itemSections: $0,
@@ -86,7 +105,7 @@ enum MockCourse {
             },
             content.listening.map {
                 activity(
-                    levelNumber: levelNumber,
+                    levelID: levelID,
                     scope: scope,
                     kind: .listening,
                     itemSections: $0,
@@ -98,7 +117,7 @@ enum MockCourse {
     }
 
     private static func activity(
-        levelNumber: Int,
+        levelID: String,
         scope: PracticeScope,
         kind: ActivityKind,
         itemSections: [[String]],
@@ -108,7 +127,7 @@ enum MockCourse {
         let copy = activityCopy(scope: scope, kind: kind)
 
         return LearningActivity(
-            id: "level-\(levelNumber)-\(copy.idSuffix)",
+            id: "\(levelID)-\(copy.idSuffix)",
             kind: kind,
             scope: scope,
             title: String(localized: copy.titleKey, defaultValue: copy.title, locale: locale),
@@ -326,6 +345,28 @@ enum MockCourse {
     private struct LevelCopy {
         let title: String
         let description: String
+    }
+
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "hangulblitz",
+        category: "CourseContent"
+    )
+
+    private static let englishCourseContent = loadCourseContent(localization: "en")
+    private static let simplifiedChineseCourseContent = loadCourseContent(localization: "zh-Hans")
+
+    private static func loadCourseContent(
+        localization: String
+    ) -> [String: LocalizedLevelContent] {
+        do {
+            return try CourseContentLoader.load(localization: localization)
+        } catch {
+            logger.error(
+                "Could not load \(localization, privacy: .public) course content: \(error.localizedDescription, privacy: .public)"
+            )
+            assertionFailure(error.localizedDescription)
+            return [:]
+        }
     }
 
     private static let englishContent = [

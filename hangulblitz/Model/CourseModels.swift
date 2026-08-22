@@ -32,7 +32,38 @@ struct Level: Identifiable {
     }
 }
 
-struct Overview {}
+struct Overview: Equatable {
+    let sections: [OverviewSection]
+}
+
+struct OverviewSection: Equatable {
+    let title: String
+    let blocks: [OverviewBlock]
+}
+
+enum OverviewBlock: Equatable {
+    case paragraph(String)
+    case note(String)
+    case table(OverviewTable)
+}
+
+struct OverviewTable: Equatable {
+    let rows: [OverviewTableRow]
+}
+
+struct OverviewTableRow: Equatable {
+    let hangul: String
+    let note: String
+    let audio: OverviewAudio
+}
+
+enum OverviewAudio: Equatable {
+    /// Resolve the conventional bundled audio file from the Hangul text.
+    case lookup
+
+    /// The course author explicitly marked this row as having no sound.
+    case unavailable
+}
 
 struct LearningActivity: Identifiable {
     let id: String

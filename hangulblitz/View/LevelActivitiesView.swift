@@ -61,9 +61,11 @@ struct LevelActivitiesContent: View {
 //                        .font(.title3.weight(.semibold))
 //                }
 
-                LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
-                    OverviewCard(cardPresentation: activityCardPresentation) {
-                        onOpenRoute(.overview(level.id))
+                if level.overview != nil {
+                    LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
+                        OverviewCard(cardPresentation: activityCardPresentation) {
+                            onOpenRoute(.overview(level.id))
+                        }
                     }
                 }
 

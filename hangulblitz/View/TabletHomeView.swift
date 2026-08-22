@@ -13,8 +13,8 @@ struct TabletHomeView<SidebarMenu: View>: View {
     let onPresentActivity: (String, LearningActivity) -> Void
     let sidebarMenu: SidebarMenu
 
-    @Environment(\.locale) private var locale
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var columnVisibility = NavigationSplitViewVisibility.automatic
     @State private var detailPath: [AppRoute] = []
 
     init(
@@ -38,7 +38,10 @@ struct TabletHomeView<SidebarMenu: View>: View {
     }
 
     var body: some View {
-        NavigationSplitView(preferredCompactColumn: $preferredCompactColumn) {
+        NavigationSplitView(
+            columnVisibility: $columnVisibility,
+            preferredCompactColumn: $preferredCompactColumn
+        ) {
             LevelListView(
                 levels: course.levels,
                 progress: progress,
@@ -73,12 +76,21 @@ struct TabletHomeView<SidebarMenu: View>: View {
         .navigationSplitViewStyle(.balanced)
         .onChange(of: selectedLevelID) {
             detailPath.removeAll()
+            restoreAllColumns()
+        }
+        .onChange(of: detailPath) {
+            if detailPath.isEmpty {
+                restoreAllColumns()
+            }
         }
         .onAppear {
             selectInitialLevelWhenExpanded()
         }
         .onChange(of: horizontalSizeClass) {
             selectInitialLevelWhenExpanded()
+            if horizontalSizeClass == .regular {
+                columnVisibility = detailPath.isEmpty ? .all : .detailOnly
+            }
         }
     }
 
@@ -89,6 +101,9 @@ struct TabletHomeView<SidebarMenu: View>: View {
 
         case .overview:
             detailPath.append(route)
+            if horizontalSizeClass == .regular {
+                columnVisibility = .detailOnly
+            }
 
         case let .activity(levelID, activityID):
             guard let activity = course.level(id: levelID)?.activity(id: activityID) else {
@@ -105,21 +120,23 @@ struct TabletHomeView<SidebarMenu: View>: View {
         selectedLevelID = course.levels.first?.id
     }
 
+    private func restoreAllColumns() {
+        if horizontalSizeClass == .regular {
+            columnVisibility = .all
+        }
+    }
+
     @ViewBuilder
     private func destination(for route: AppRoute) -> some View {
         switch route {
-        case .overview:
-            ActivityPlaceholderView(
-                title: String(
-                    localized: "activity.overview.title",
-                    defaultValue: "Overview",
-                    locale: locale,
-                    comment: "Title of the level overview activity."
-                )
-            )
+        case let .overview(levelID):
+            if let level = course.level(id: levelID) {
+                OverviewView(level: level)
+            }
 
         case .level, .activity:
             EmptyView()
         }
     }
+
 }

@@ -21,9 +21,9 @@ struct ActivityDisplayProgress {
 enum MockProgress {
     static func level(_ levelID: String) -> LevelDisplayProgress? {
         switch levelID {
-        case "level-1":
+        case MockCourse.levelIDs[0]:
             LevelDisplayProgress(standardProgress: 0.15, isBlitz: false)
-        case "level-2":
+        case MockCourse.levelIDs[1]:
             LevelDisplayProgress(standardProgress: 1, isBlitz: true)
         default:
             nil
@@ -31,7 +31,7 @@ enum MockProgress {
     }
 
     static func activity(_ activityID: String) -> ActivityDisplayProgress? {
-        guard activityID.hasPrefix("level-1-") else { return nil }
+        guard activityID.hasPrefix("\(MockCourse.levelOneID)-") else { return nil }
 
         if activityID.hasSuffix("get-familiar") || activityID.hasSuffix("connections") {
             return ActivityDisplayProgress(hasAttempt: true, isCompleted: true, score: nil)
