@@ -19,6 +19,7 @@ struct Level: Identifiable {
     let number: Int
     let title: String
     let description: String
+    let isAvailable: Bool
     let overview: Overview?
     let currentActivities: [LearningActivity]
     let mixedActivities: [LearningActivity]

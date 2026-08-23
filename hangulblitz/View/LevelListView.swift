@@ -12,20 +12,25 @@ struct LevelListView: View {
     let usesCardRows: Bool
 
     var body: some View {
-        List(levels, selection: $selectedLevelID) { level in
-            NavigationLink(value: level.id) {
-                LevelRow(
-                    level: level,
-                    progress: displayProgress(for: level),
-                    isSelected: !usesCardRows && level.id == selectedLevelID,
-                    presentation: usesCardRows ? .card : .sidebar
-                )
+        List(selection: $selectedLevelID) {
+            ForEach(levels) { level in
+                levelListItem(for: level)
             }
+
+            // Remove this footer when the complete course catalogue is available.
+            Text(
+                "level.list.more_levels_coming_soon",
+                comment: "Permanent footer during course development that tells users additional levels have not yet been added."
+            )
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
             .listRowInsets(
                 EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
             )
-
-            .listRowSeparator(usesCardRows ? .hidden : .visible)
+            .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
         }
         .tint(.clear) // this is to hide the selection box around the list item. Didn't find better way to hide it. Guess it's a component default behaviour.
@@ -40,7 +45,39 @@ struct LevelListView: View {
         .navigationLinkIndicatorVisibility(.hidden)
     }
 
+    @ViewBuilder
+    private func levelListItem(for level: Level) -> some View {
+        Group {
+            if level.isAvailable {
+                NavigationLink(value: level.id) {
+                    levelRow(for: level)
+                }
+            } else {
+                levelRow(for: level)
+            }
+        }
+        .listRowInsets(
+            EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+        )
+        .listRowSeparator(usesCardRows ? .hidden : .visible)
+        .listRowBackground(Color.clear)
+        .selectionDisabled(!level.isAvailable)
+    }
+
+    private func levelRow(for level: Level) -> some View {
+        LevelRow(
+            level: level,
+            progress: displayProgress(for: level),
+            isSelected: !usesCardRows && level.id == selectedLevelID,
+            presentation: usesCardRows ? .card : .sidebar
+        )
+    }
+
     private func displayProgress(for level: Level) -> LevelDisplayProgress? {
+        guard level.isAvailable else {
+            return nil
+        }
+
         let levelProgress = LevelProgress(
             level: level,
             state: progress.levels[level.id] ?? LevelLearningState()
@@ -222,6 +259,7 @@ private extension Level {
             number: number,
             title: title,
             description: description,
+            isAvailable: number <= 3,
             overview: nil,
             currentActivities: includesActivities ? [reading, listening] : [],
             mixedActivities: []

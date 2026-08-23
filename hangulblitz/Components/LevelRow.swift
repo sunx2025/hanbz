@@ -21,15 +21,28 @@ struct LevelRow: View {
             LevelTitle(level: level)
                 .font(.headline)
                 //.foregroundStyle(isSelected ? Color.accentColor : Color.primary)
-                .foregroundStyle(isSelected ? .accent : Color.primary)
+                .foregroundStyle(
+                    level.isAvailable
+                        ? (isSelected ? .accent : Color.primary)
+                        : Color.secondary
+                )
 
-            Text(verbatim: level.description)
+            Group {
+                if level.isAvailable {
+                    Text(verbatim: level.description)
+                } else {
+                    Text(
+                        "level.availability.coming_soon",
+                        comment: "Status shown instead of a level description when its course content is not yet available."
+                    )
+                }
+            }
                 .font(.footnote)
                 //.foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
                 .foregroundStyle(isSelected ? .accent : Color.secondary)
                 .lineLimit(2)
 
-            if let progress {
+            if level.isAvailable, let progress {
                 LevelProgressIndicator(
                     progress: progress.standardProgress,
                     isBlitz: progress.isBlitz

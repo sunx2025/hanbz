@@ -34,7 +34,10 @@ struct TabletHomeView<SidebarMenu: View>: View {
     }
 
     private var selectedLevel: Level? {
-        selectedLevelID.flatMap(course.level(id:)) ?? course.levels.first
+        let selectedLevel = selectedLevelID.flatMap(course.level(id:))
+        return selectedLevel?.isAvailable == true
+            ? selectedLevel
+            : course.levels.first(where: \.isAvailable)
     }
 
     var body: some View {
@@ -97,6 +100,9 @@ struct TabletHomeView<SidebarMenu: View>: View {
     private func open(_ route: AppRoute) {
         switch route {
         case let .level(levelID):
+            guard course.level(id: levelID)?.isAvailable == true else {
+                return
+            }
             selectedLevelID = levelID
 
         case .overview:
@@ -106,7 +112,9 @@ struct TabletHomeView<SidebarMenu: View>: View {
             }
 
         case let .activity(levelID, activityID):
-            guard let activity = course.level(id: levelID)?.activity(id: activityID) else {
+            guard let level = course.level(id: levelID),
+                  level.isAvailable,
+                  let activity = level.activity(id: activityID) else {
                 return
             }
             onPresentActivity(levelID, activity)
@@ -117,7 +125,7 @@ struct TabletHomeView<SidebarMenu: View>: View {
         guard horizontalSizeClass == .regular, selectedLevelID == nil else {
             return
         }
-        selectedLevelID = course.levels.first?.id
+        selectedLevelID = course.levels.first(where: \.isAvailable)?.id
     }
 
     private func restoreAllColumns() {
@@ -130,7 +138,7 @@ struct TabletHomeView<SidebarMenu: View>: View {
     private func destination(for route: AppRoute) -> some View {
         switch route {
         case let .overview(levelID):
-            if let level = course.level(id: levelID) {
+            if let level = course.level(id: levelID), level.isAvailable {
                 OverviewView(level: level)
             }
 
