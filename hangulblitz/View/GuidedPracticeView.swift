@@ -267,15 +267,32 @@ private struct GuidedPracticeGetReadyView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
-                Text(
-                    "guided.get_ready",
-                    comment: "Brief message shown before guided practice begins automatically. Markdown may emphasise part of the phrase."
-                )
-                .font(.title)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+                VStack(spacing: 16) {
+                    Spacer()
+                    Text(
+                        "guided.get_ready.instruction",
+                        comment: "Instruction shown above the listening practice get-ready lights."
+                    )
+                    .font(.callout)
+                    .multilineTextAlignment(.center)
+                    
+                    Text(verbatim: "💡")
+                        .font(.title)
+                        .accessibilityHidden(true)
+                    
+                    Text(
+                        "guided.get_ready",
+                        comment: "Brief message shown before guided practice begins automatically. Markdown may emphasise part of the phrase."
+                    )
+                    .font(.title)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    Spacer()
+                }
+                .frame(height: geo.size.height * 0.76)
             }
-            .frame(height: geo.size.height * 0.7)
+            //.frame(height: geo.size.height * 0.7)
+            .padding(.horizontal, 24)
             .frame(maxWidth: .infinity)
         }
     }

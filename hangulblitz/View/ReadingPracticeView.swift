@@ -83,15 +83,12 @@ struct ReadingPracticeView: View {
             }
         }
         .sheet(isPresented: $showsHelp) {
-            let help = ReadingPracticeHelpView(
-                usesTabletPresentation: horizontalSizeClass == .regular,
-                start: finishHelp
-            )
+            let help = ReadingPracticeHelpView(start: finishHelp)
 
             if horizontalSizeClass == .regular {
                 help
                     .interactiveDismissDisabled()
-                    .presentationSizing(.fitted)
+                    //.presentationSizing(.fitted)
             } else {
                 help
                     .interactiveDismissDisabled()
@@ -597,7 +594,6 @@ private struct ReadingHowToPlayButton: View {
 }
 
 private struct ReadingPracticeHelpView: View {
-    let usesTabletPresentation: Bool
     let start: () -> Void
 
     var body: some View {
@@ -666,10 +662,6 @@ private struct ReadingPracticeHelpView: View {
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 32, trailing: 24))
-        .frame(
-            minWidth: usesTabletPresentation ? 400 : nil,
-            maxWidth: usesTabletPresentation ? 400 : .infinity
-        )
     }
 }
 

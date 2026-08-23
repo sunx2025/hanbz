@@ -82,15 +82,12 @@ struct ListeningPracticeView: View {
             }
         }
         .sheet(isPresented: $showsHelp) {
-            let help = ListeningPracticeHelpView(
-                usesTabletPresentation: horizontalSizeClass == .regular,
-                start: finishHelp
-            )
+            let help = ListeningPracticeHelpView(start: finishHelp)
 
             if horizontalSizeClass == .regular {
                 help
                     .interactiveDismissDisabled()
-                    .presentationSizing(.fitted)
+                    //.presentationSizing(.fitted)
             } else {
                 help
                     .interactiveDismissDisabled()
@@ -660,7 +657,6 @@ private struct ListeningHowToPlayButton: View {
 }
 
 private struct ListeningPracticeHelpView: View {
-    let usesTabletPresentation: Bool
     let start: () -> Void
 
     var body: some View {
@@ -705,10 +701,6 @@ private struct ListeningPracticeHelpView: View {
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(EdgeInsets(top: 32, leading: 24, bottom: 32, trailing: 24))
-        .frame(
-            minWidth: usesTabletPresentation ? 400 : nil,
-            maxWidth: usesTabletPresentation ? 400 : .infinity
-        )
     }
 
     private func helpStep(title: LocalizedStringKey, body: LocalizedStringKey) -> some View {
