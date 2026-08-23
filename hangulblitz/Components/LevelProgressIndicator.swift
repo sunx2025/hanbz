@@ -29,7 +29,8 @@ struct LevelProgressIndicator: View {
                     .fill(Color("Muted"))
 
                 Capsule()
-                    .fill(.tint)
+                    //.fill(.tint)
+                    .fill(.accent)
                     .frame(width: trackWidth * clampedProgress)
             }
             .frame(width: trackWidth, height: trackHeight)
@@ -52,7 +53,8 @@ struct LevelProgressIndicator: View {
             }
         }
         .font(.footnote.weight(.semibold))
-        .foregroundStyle(.tint)
+        //.foregroundStyle(.tint)
+        .foregroundStyle(.accent)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
             Text(

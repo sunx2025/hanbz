@@ -21,11 +21,6 @@ struct LevelListView: View {
                     presentation: usesCardRows ? .card : .sidebar
                 )
             }
-//            .listRowInsets(
-//                usesCardRows
-//                    ? EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-//                    : EdgeInsets()
-//            )
             .listRowInsets(
                 EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
             )
@@ -33,6 +28,7 @@ struct LevelListView: View {
             .listRowSeparator(usesCardRows ? .hidden : .visible)
             .listRowBackground(Color.clear)
         }
+        .tint(.clear) // this is to hide the selection box around the list item. Didn't find better way to hide it. Guess it's a component default behaviour.
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(

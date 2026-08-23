@@ -20,11 +20,13 @@ struct LevelRow: View {
         VStack(alignment: .leading, spacing: 4) {
             LevelTitle(level: level)
                 .font(.headline)
-                .foregroundStyle(isSelected ? Color.accentColor : Color.primary)
+                //.foregroundStyle(isSelected ? Color.accentColor : Color.primary)
+                .foregroundStyle(isSelected ? .accent : Color.primary)
 
             Text(verbatim: level.description)
                 .font(.footnote)
-                .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+                //.foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+                .foregroundStyle(isSelected ? .accent : Color.secondary)
                 .lineLimit(2)
 
             if let progress {
