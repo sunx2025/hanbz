@@ -80,7 +80,7 @@ struct LearningActivity: Identifiable {
     }
 }
 
-enum PracticeScope {
+enum PracticeScope: String, Codable {
     case current
     case mixed
 }

@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var preferredCompactColumn = NavigationSplitViewColumn.sidebar
     @State private var presentedActivity: PresentedActivity?
     @State private var progress = UserProgress.load()
+    @State private var isShowingResetProgressAlert = false
 
     var body: some View {
         let course = MockCourse.course(locale: locale)
@@ -37,6 +38,17 @@ struct ContentView: View {
             }
         }
         .tint(.accentColor)
+        .alert(
+            "menu.reset_progress.confirmation.title",
+            isPresented: $isShowingResetProgressAlert
+        ) {
+            Button("common.cancel", role: .cancel) {}
+            Button("menu.reset_progress", role: .destructive) {
+                resetProgress()
+            }
+        } message: {
+            Text("menu.reset_progress.confirmation.message")
+        }
     }
 
     private var appMenu: some View {
@@ -48,28 +60,52 @@ struct ContentView: View {
                     Image(systemName: "bubble.left.and.bubble.right")
                 }
             }
+            .disabled(true)
 
             Button(action: { /* TODO: Present frequently asked questions. */ }) {
                 Label {
                     Text("menu.faq", comment: "Menu action that opens frequently asked questions.")
                 } icon: {
-                    Image(systemName: "questionmark.folder")
+                    Image(systemName: "questionmark.bubble")
                 }
             }
+            .disabled(true)
 
             Button(action: { /* TODO: Open the App Store rating flow. */ }) {
                 Label {
                     Text("menu.rate_app", comment: "Menu action that asks the user to rate the app.")
                 } icon: {
-                    Image(systemName: "heart")
+                    Image(systemName: "star")
+                }
+            }
+            .disabled(true)
+                      
+
+            Divider()
+
+            Button(role: .destructive) {
+                isShowingResetProgressAlert = true
+            } label: {
+                Label {
+                    Text(
+                        "menu.reset_progress",
+                        comment: "Destructive menu action that clears the current user's learning progress."
+                    )
+                } icon: {
+                    Image(systemName: "arrow.counterclockwise")
                 }
             }
         } label: {
-            Image(systemName: "line.3.horizontal")
+            Image(systemName: "line.3.horizontal.decrease")
         }
         .accessibilityLabel(
             Text("menu.accessibility_label", comment: "Accessibility label for the main app menu button.")
         )
+    }
+
+    private func resetProgress() {
+        guard UserProgress.reset() else { return }
+        progress = UserProgress()
     }
 
     @ViewBuilder

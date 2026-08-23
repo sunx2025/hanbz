@@ -19,13 +19,13 @@ enum ProgressPolicy {
     nonisolated static let blitzThreshold = 5.5
 }
 
-struct User: Identifiable {
+struct User: Identifiable, Codable {
     let id: String
     var name: String
     var progress: UserProgress
 }
 
-struct UserProgress {
+struct UserProgress: Codable {
     var levels: [String: LevelLearningState] = [:]
 
     mutating func record(
@@ -61,17 +61,22 @@ struct UserProgress {
             .insert(activityID)
     }
 
-    static func load() -> UserProgress {
-        // TODO: Load persisted user progress when storage is introduced.
-        UserProgress()
+    static func load(userID: String = ProgressStore.defaultUserID) -> UserProgress {
+        ProgressStore.load(userID: userID)
     }
 
-    func save() {
-        // TODO: Persist user progress when storage is introduced.
+    @discardableResult
+    func save(userID: String = ProgressStore.defaultUserID) -> Bool {
+        ProgressStore.save(self, userID: userID)
+    }
+
+    @discardableResult
+    static func reset(userID: String = ProgressStore.defaultUserID) -> Bool {
+        ProgressStore.reset(userID: userID)
     }
 }
 
-struct LevelItemID: Hashable {
+struct LevelItemID: Hashable, Codable {
     let levelID: String
     let text: String
 
@@ -81,17 +86,17 @@ struct LevelItemID: Hashable {
     }
 }
 
-struct LevelLearningState {
+struct LevelLearningState: Codable {
     var items: [LevelItemID: LevelItemProgress] = [:]
     var completedNonScoredActivityIDs: Set<String> = []
 }
 
-struct LevelItemProgress {
+struct LevelItemProgress: Codable {
     var reading = ReadingItemProgress()
     var listening = ListeningItemProgress()
 }
 
-struct ReadingItemProgress {
+struct ReadingItemProgress: Codable {
     var mastery: Double?
     var attempts: [ReadingAttempt] = []
 
@@ -102,7 +107,7 @@ struct ReadingItemProgress {
     }
 }
 
-struct ListeningItemProgress {
+struct ListeningItemProgress: Codable {
     var mastery: Double?
     var attempts: [ListeningAttempt] = []
 
@@ -113,7 +118,7 @@ struct ListeningItemProgress {
     }
 }
 
-struct ReadingAttempt {
+struct ReadingAttempt: Codable {
     let sessionID: UUID
     let scope: PracticeScope
     let outcome: ReadingAttemptOutcome
@@ -143,13 +148,13 @@ struct ReadingAttempt {
     }
 }
 
-enum ReadingAttemptOutcome: Equatable {
+enum ReadingAttemptOutcome: String, Codable {
     case correct
     case incorrect
     case timedOut
 }
 
-struct ListeningAttempt {
+struct ListeningAttempt: Codable {
     let sessionID: UUID
     let scope: PracticeScope
     let outcome: ListeningAttemptOutcome
@@ -179,7 +184,7 @@ struct ListeningAttempt {
     }
 }
 
-enum ListeningAttemptOutcome: Equatable {
+enum ListeningAttemptOutcome: String, Codable {
     case correct
     case incorrect
     case notSure
