@@ -82,6 +82,19 @@ struct LevelActivitiesContent: View {
                 )
 
                 activityGrid(level.mixedActivities)
+
+                if level.apply != nil {
+                    sectionTitle(
+                        key: "section.extension",
+                        comment: "Heading above optional extension reading for a level."
+                    )
+
+                    LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
+                        ApplyCard(cardPresentation: activityCardPresentation) {
+                            onOpenRoute(.apply(level.id))
+                        }
+                    }
+                }
             }
             .padding(16)
         }
@@ -131,47 +144,95 @@ private struct OverviewCard: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            content
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(16)
-                .background(Color(.secondarySystemGroupedBackground))
-                .clipShape(.rect(cornerRadius: 16))
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(
-            Text("activity.overview.title", comment: "Title of the level overview activity.")
+        CourseContentCard(
+            title: Text(
+                "activity.overview.title",
+                comment: "Title of the level overview activity."
+            ),
+            subtitle: nil,
+            systemImage: "book.fill",
+            presentation: cardPresentation,
+            action: action
         )
     }
+}
 
-    @ViewBuilder
-    private var content: some View {
-        switch cardPresentation {
-        case .listRow:
-            HStack(alignment: .center, spacing: 8) {
-                ActivityLeadingIcon(systemName: "book.fill")
-                title
-            }
-        case .gridCard:
-            VStack(alignment: .leading, spacing: 8) {
-                title
+private struct ApplyCard: View {
+    let cardPresentation: ActivityCard.Presentation
+    let action: () -> Void
 
-                HStack(spacing: 4) {
-                    Text("activity.overview.action.read", comment: "Action text shown on the overview card on wider layouts.")
+    var body: some View {
+        CourseContentCard(
+            title: Text(
+                "activity.apply.title",
+                comment: "Title of the optional words and phrases article."
+            ),
+            subtitle: Text(
+                "activity.apply.description",
+                comment: "Subtitle of the optional words and phrases article."
+            ),
+            systemImage: "sparkles",
+            presentation: cardPresentation,
+            action: action
+        )
+    }
+}
 
-                    Image(systemName: "chevron.right")
-                        .imageScale(.small)
+private struct CourseContentCard: View {
+    let title: Text
+    let subtitle: Text?
+    let systemImage: String
+    let presentation: ActivityCard.Presentation
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Group {
+                switch presentation {
+                case .listRow:
+                    HStack(alignment: .center, spacing: 8) {
+                        ActivityLeadingIcon(systemName: systemImage)
+                        labels
+                    }
+                case .gridCard:
+                    VStack(alignment: .leading, spacing: 8) {
+                        labels
+
+                        HStack(spacing: 4) {
+                            Text(
+                                "activity.overview.action.read",
+                                comment: "Action text shown on article cards on wider layouts."
+                            )
+
+                            Image(systemName: "chevron.right")
+                                .imageScale(.small)
+                        }
+                        .font(.headline)
+                        .foregroundStyle(.tint)
+                    }
                 }
-                .font(.headline)
-                .foregroundStyle(.tint)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(.rect(cornerRadius: 16))
         }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
     }
 
-    private var title: some View {
-        Text("activity.overview.title", comment: "Title of the level overview activity.")
-            .font(.headline)
-            .foregroundStyle(.primary)
+    private var labels: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            title
+                .font(.headline)
+                .foregroundStyle(.primary)
+
+            if let subtitle {
+                subtitle
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 }
 

@@ -20,7 +20,8 @@ struct Level: Identifiable {
     let title: String
     let description: String
     let isAvailable: Bool
-    let overview: Overview?
+    let overview: CourseArticle?
+    let apply: CourseArticle?
     let currentActivities: [LearningActivity]
     let mixedActivities: [LearningActivity]
 
@@ -33,34 +34,34 @@ struct Level: Identifiable {
     }
 }
 
-struct Overview: Equatable {
-    let sections: [OverviewSection]
+struct CourseArticle: Equatable {
+    let sections: [CourseArticleSection]
 }
 
-struct OverviewSection: Equatable {
+struct CourseArticleSection: Equatable {
     let title: String
-    let blocks: [OverviewBlock]
+    let blocks: [CourseArticleBlock]
 }
 
-enum OverviewBlock: Equatable {
+enum CourseArticleBlock: Equatable {
     case paragraph(String)
     case note(String)
-    case table(OverviewTable)
+    case table(CourseArticleTable)
 }
 
-struct OverviewTable: Equatable {
-    let rows: [OverviewTableRow]
+struct CourseArticleTable: Equatable {
+    let rows: [CourseArticleTableRow]
 }
 
-struct OverviewTableRow: Equatable {
+struct CourseArticleTableRow: Equatable {
     let hangul: String
     let note: String
-    let audio: OverviewAudio
+    let audio: CourseArticleAudio
 }
 
-enum OverviewAudio: Equatable {
-    /// Resolve the conventional bundled audio file from the Hangul text.
-    case lookup
+enum CourseArticleAudio: Equatable {
+    /// The page's playback strategy may pronounce this row.
+    case available
 
     /// The course author explicitly marked this row as having no sound.
     case unavailable

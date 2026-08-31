@@ -8,5 +8,6 @@ import Foundation
 enum AppRoute: Hashable {
     case level(String)
     case overview(String)
+    case apply(String)
     case activity(levelID: String, activityID: String)
 }

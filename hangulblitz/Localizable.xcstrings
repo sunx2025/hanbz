@@ -35,6 +35,40 @@
         }
       }
     },
+    "activity.apply.description" : {
+      "comment" : "Subtitle of the optional words and phrases article.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply your learning"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "学以致用"
+          }
+        }
+      }
+    },
+    "activity.apply.title" : {
+      "comment" : "Title of the optional words and phrases article.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Words & Phrases"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "词语与短句"
+          }
+        }
+      }
+    },
     "activity.connections.description" : {
       "comment" : "Subtitle for an activity that links the current level with earlier patterns.",
       "extractionState" : "stale",
@@ -48,7 +82,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "联系本关卡与之前的规律"
+            "value" : "联系本课与前几课的内容"
           }
         }
       }
@@ -84,7 +118,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "熟悉本关卡的规律"
+            "value" : "熟悉本课的内容"
           }
         }
       }
@@ -120,7 +154,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "练习本关卡介绍的文字"
+            "value" : "练习本课引入的生字"
           }
         }
       }
@@ -156,7 +190,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "辨认截至本关卡的混合音频"
+            "value" : "辨认本课与前几课的文字发音"
           }
         }
       }
@@ -192,7 +226,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "认读截至本关卡的混合内容"
+            "value" : "认读本课及前几课的生字"
           }
         }
       }
@@ -216,7 +250,7 @@
       }
     },
     "activity.overview.action.read" : {
-      "comment" : "Action text shown on the overview card on wider layouts.",
+      "comment" : "Action text shown on article cards on wider layouts.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -262,7 +296,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "练习本关卡介绍的文字"
+            "value" : "练习本课引入的生字"
           }
         }
       }
@@ -297,6 +331,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成"
+          }
+        }
+      }
+    },
+    "apply.audio.issue.missing_korean_voice" : {
+      "comment" : "Toast shown when the device has no Korean text-to-speech voice installed.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Korean voice isn’t installed on this device. Download one from the speech settings under Accessibility."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此设备未安装韩语语音。请前往“设置”中的辅助功能语音设置下载。"
           }
         }
       }
@@ -479,7 +530,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更多关卡即将推出"
+            "value" : "更多课程即将推出"
           }
         }
       }
@@ -496,7 +547,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "关卡进度"
+            "value" : "本课进度"
           }
         }
       }
@@ -530,7 +581,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第%1$lld关：%2$@"
+            "value" : "第%1$lld课：%2$@"
           }
         }
       }
@@ -657,7 +708,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "进步不错"
+            "value" : "有进步哦"
           }
         }
       }
@@ -691,7 +742,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请尽快听音并选择正确答案"
+            "value" : "听音频并以最快速度选择正确答案"
           }
         }
       }
@@ -759,7 +810,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仔细听音，辨认声音，并在时间结束前选择正确的韩文字符。"
+            "value" : "听音频的发音，在时间结束前，尽快选择正确的韩文字符。"
           }
         }
       }
@@ -793,7 +844,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仔细听声音。"
+            "value" : "认真听音频发音。"
           }
         }
       }
@@ -810,7 +861,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 1 步：听音"
+            "value" : "第 1 步：听音频"
           }
         }
       }
@@ -827,7 +878,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "点击与声音对应的韩文字符。"
+            "value" : "点击与音频对应的韩文字符。"
           }
         }
       }
@@ -844,7 +895,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "第 2 步：选择"
+            "value" : "第 2 步：选文字"
           }
         }
       }
@@ -878,7 +929,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "听音并选择"
+            "value" : "听发音并选择"
           }
         }
       }
@@ -1035,7 +1086,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这会清除你的全部学习进度，所有关卡都将恢复到初始状态。"
+            "value" : "这会清除你的全部学习进度，所有课程都将恢复到初始状态。"
           }
         }
       }
@@ -1446,7 +1497,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "进步不错"
+            "value" : "有进步哦"
           }
         }
       }
@@ -1480,7 +1531,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请尽快大声读出"
+            "value" : "请尽快读出"
           }
         }
       }
@@ -1548,7 +1599,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "目标是认出每个韩文字符，并尽快大声读出来。"
+            "value" : "目标是以最快的速度认出每个韩文字符，并读出。"
           }
         }
       }
@@ -1582,7 +1633,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "认出字符后立即大声读出来。"
+            "value" : "认出字符后立即大声读出。"
           }
         }
       }
@@ -1756,7 +1807,24 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当前关卡"
+            "value" : "当前课程"
+          }
+        }
+      }
+    },
+    "section.extension" : {
+      "comment" : "Heading above optional extension reading for a level.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extension"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拓展"
           }
         }
       }

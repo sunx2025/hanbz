@@ -16,9 +16,10 @@ struct OverviewView: View {
         GeometryReader { geometry in
             ScrollView {
                 if let overview = level.overview {
-                    OverviewArticle(
-                        overview: overview,
+                    CourseArticleView(
+                        article: overview,
                         usesCJKHeadingStyle: usesCJKHeadingStyle,
+                        tableLayout: .inline,
                         onPlayAudio: { text in
                             audioPlayer.play(text: text)
                         }
@@ -68,17 +69,19 @@ struct OverviewView: View {
     }
 }
 
-private struct OverviewArticle: View {
-    let overview: Overview
+struct CourseArticleView: View {
+    let article: CourseArticle
     let usesCJKHeadingStyle: Bool
+    let tableLayout: CourseArticleTableLayout
     let onPlayAudio: (String) -> Void
 
     var body: some View {
         LazyVStack(alignment: .leading, spacing: 32) {
-            ForEach(Array(overview.sections.enumerated()), id: \.offset) { _, section in
-                OverviewSectionView(
+            ForEach(Array(article.sections.enumerated()), id: \.offset) { _, section in
+                CourseArticleSectionView(
                     section: section,
                     usesCJKHeadingStyle: usesCJKHeadingStyle,
+                    tableLayout: tableLayout,
                     onPlayAudio: onPlayAudio
                 )
             }
@@ -89,9 +92,10 @@ private struct OverviewArticle: View {
     }
 }
 
-private struct OverviewSectionView: View {
-    let section: OverviewSection
+private struct CourseArticleSectionView: View {
+    let section: CourseArticleSection
     let usesCJKHeadingStyle: Bool
+    let tableLayout: CourseArticleTableLayout
     let onPlayAudio: (String) -> Void
 
     var body: some View {
@@ -115,7 +119,11 @@ private struct OverviewSectionView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                     case let .table(table):
-                        OverviewTableView(table: table, onPlayAudio: onPlayAudio)
+                        CourseArticleTableView(
+                            table: table,
+                            layout: tableLayout,
+                            onPlayAudio: onPlayAudio
+                        )
                     }
                 }
             }
@@ -123,14 +131,24 @@ private struct OverviewSectionView: View {
     }
 }
 
-private struct OverviewTableView: View {
-    let table: OverviewTable
+enum CourseArticleTableLayout {
+    case inline
+    case stacked
+}
+
+private struct CourseArticleTableView: View {
+    let table: CourseArticleTable
+    let layout: CourseArticleTableLayout
     let onPlayAudio: (String) -> Void
 
     var body: some View {
         VStack(spacing: 0) {
             ForEach(Array(table.rows.enumerated()), id: \.offset) { index, row in
-                OverviewTableRowView(row: row, onPlayAudio: onPlayAudio)
+                CourseArticleTableRowView(
+                    row: row,
+                    layout: layout,
+                    onPlayAudio: onPlayAudio
+                )
 
                 if index < table.rows.count - 1 {
                     Divider()
@@ -143,11 +161,21 @@ private struct OverviewTableView: View {
     }
 }
 
-private struct OverviewTableRowView: View {
-    let row: OverviewTableRow
+private struct CourseArticleTableRowView: View {
+    let row: CourseArticleTableRow
+    let layout: CourseArticleTableLayout
     let onPlayAudio: (String) -> Void
 
     var body: some View {
+        switch layout {
+        case .inline:
+            inlineContent
+        case .stacked:
+            stackedContent
+        }
+    }
+
+    private var inlineContent: some View {
         HStack(alignment: .center, spacing: 8) {
             Text(row.hangul)
                 .font(.headline.bold())
@@ -160,34 +188,44 @@ private struct OverviewTableRowView: View {
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
-//            Button {
-//                onPlayAudio(row.hangul)
-//            } label: {
-//                Image(systemName: "speaker.wave.2.fill")
-//                    .imageScale(.small)
-//            }
-//            .buttonStyle(.borderedProminent)
-//            .buttonBorderShape(.circle)
-//            .controlSize(.small)
-//            //.frame(width: 44, height: 44)
-//            .disabled(row.audio == .unavailable)
-//            .accessibilityLabel(accessibilityLabel)
-            if row.audio != .unavailable {
-                Button {
-                    onPlayAudio(row.hangul)
-                } label: {
-                    Image(systemName: "speaker.wave.2.fill")
-                        .imageScale(.small)
-                }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.circle)
-                .controlSize(.small)
-                //.frame(width: 44, height: 44)
-                .accessibilityLabel(accessibilityLabel)
-            }
+            playButton
         }
         .padding(8)
         .frame(minHeight: 44)
+    }
+
+    private var stackedContent: some View {
+        HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(row.hangul)
+                    .font(.headline)
+
+                Text(row.note)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            playButton
+        }
+        .padding(8)
+        .frame(minHeight: 44)
+    }
+
+    @ViewBuilder
+    private var playButton: some View {
+        if row.audio != .unavailable {
+            Button {
+                onPlayAudio(row.hangul)
+            } label: {
+                Image(systemName: "speaker.wave.2.fill")
+                    .imageScale(.small)
+            }
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.circle)
+            .controlSize(.small)
+            .accessibilityLabel(accessibilityLabel)
+        }
     }
 
     private var accessibilityLabel: Text {

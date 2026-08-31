@@ -9,24 +9,7 @@ struct PracticeAudioIssueBanner: View {
     let issue: PracticeAudioIssue
 
     var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.orange)
-
-            Text(message)
-                .font(.callout.weight(.medium))
-                .foregroundStyle(.primary)
-                .lineLimit(2)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(.regularMaterial, in: .rect(cornerRadius: 14))
-        .overlay {
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(Color(.separator), lineWidth: 0.5)
-        }
-        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
-        .accessibilityElement(children: .combine)
+        AudioIssueBanner(message: message)
     }
 
     private var message: String {
@@ -46,6 +29,31 @@ struct PracticeAudioIssueBanner: View {
         }
 
         return String(format: format, issue.text)
+    }
+}
+
+struct AudioIssueBanner: View {
+    let message: String
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.orange)
+
+            Text(message)
+                .font(.callout.weight(.medium))
+                .foregroundStyle(.primary)
+                .lineLimit(2)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(.regularMaterial, in: .rect(cornerRadius: 14))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(Color(.separator), lineWidth: 0.5)
+        }
+        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
+        .accessibilityElement(children: .combine)
     }
 }
 

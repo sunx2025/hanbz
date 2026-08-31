@@ -105,7 +105,7 @@ struct TabletHomeView<SidebarMenu: View>: View {
             }
             selectedLevelID = levelID
 
-        case .overview:
+        case .overview, .apply:
             detailPath.append(route)
             if horizontalSizeClass == .regular {
                 columnVisibility = .detailOnly
@@ -140,6 +140,13 @@ struct TabletHomeView<SidebarMenu: View>: View {
         case let .overview(levelID):
             if let level = course.level(id: levelID), level.isAvailable {
                 OverviewView(level: level)
+            }
+
+        case let .apply(levelID):
+            if let level = course.level(id: levelID),
+               level.isAvailable,
+               level.apply != nil {
+                ApplyView(level: level)
             }
 
         case .level, .activity:

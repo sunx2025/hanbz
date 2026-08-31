@@ -46,6 +46,7 @@ enum MockCourse {
                     description: localizedLevel?.description ?? copy.description,
                     isAvailable: levelNumber <= 3,
                     overview: localizedLevel?.overview,
+                    apply: localizedLevel?.apply,
                     currentActivities: activities(
                         levelID: levelID,
                         scope: .current,

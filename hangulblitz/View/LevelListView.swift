@@ -261,6 +261,7 @@ private extension Level {
             description: description,
             isAvailable: number <= 3,
             overview: nil,
+            apply: nil,
             currentActivities: includesActivities ? [reading, listening] : [],
             mixedActivities: []
         )

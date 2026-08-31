@@ -9,7 +9,8 @@ struct LocalizedLevelContent: Equatable {
     let id: String
     let title: String
     let description: String
-    let overview: Overview?
+    let overview: CourseArticle?
+    let apply: CourseArticle?
 }
 
 enum CourseContentParser {
@@ -37,7 +38,8 @@ enum CourseContentParser {
 
             skipEmptyLines(lines, cursor: &cursor)
             let description = try parseLevelDescription(lines, cursor: &cursor)
-            var overview: Overview?
+            var overview: CourseArticle?
+            var apply: CourseArticle?
 
             while cursor < lines.count, headingText(lines[cursor], level: 1) == nil {
                 if isRule(lines[cursor]) {
@@ -52,7 +54,17 @@ enum CourseContentParser {
                 cursor += 1
 
                 if moduleID == "title.overview" {
-                    overview = try parseOverview(lines, cursor: &cursor)
+                    overview = try parseArticle(
+                        lines,
+                        cursor: &cursor,
+                        moduleName: "Overview"
+                    )
+                } else if moduleID == "title.apply" {
+                    apply = try parseArticle(
+                        lines,
+                        cursor: &cursor,
+                        moduleName: "Apply"
+                    )
                 } else {
                     skipModule(lines, cursor: &cursor)
                 }
@@ -65,7 +77,8 @@ enum CourseContentParser {
                 id: levelID,
                 title: title,
                 description: description,
-                overview: overview
+                overview: overview,
+                apply: apply
             )
         }
 
@@ -93,11 +106,12 @@ enum CourseContentParser {
         return descriptionLines.joined(separator: "\n")
     }
 
-    private static func parseOverview(
+    private static func parseArticle(
         _ lines: [String],
-        cursor: inout Int
-    ) throws -> Overview {
-        var sections: [OverviewSection] = []
+        cursor: inout Int,
+        moduleName: String
+    ) throws -> CourseArticle {
+        var sections: [CourseArticleSection] = []
 
         while cursor < lines.count {
             skipEmptyLines(lines, cursor: &cursor)
@@ -109,24 +123,24 @@ enum CourseContentParser {
             }
 
             guard let title = headingText(lines[cursor], level: 4) else {
-                throw error("Overview content must begin with a section heading", line: cursor)
+                throw error("\(moduleName) content must begin with a section heading", line: cursor)
             }
             cursor += 1
             let blocks = try parseSectionBlocks(lines, cursor: &cursor)
-            sections.append(OverviewSection(title: title, blocks: blocks))
+            sections.append(CourseArticleSection(title: title, blocks: blocks))
         }
 
         guard !sections.isEmpty else {
-            throw error("Overview must contain at least one section", line: cursor)
+            throw error("\(moduleName) must contain at least one section", line: cursor)
         }
-        return Overview(sections: sections)
+        return CourseArticle(sections: sections)
     }
 
     private static func parseSectionBlocks(
         _ lines: [String],
         cursor: inout Int
-    ) throws -> [OverviewBlock] {
-        var blocks: [OverviewBlock] = []
+    ) throws -> [CourseArticleBlock] {
+        var blocks: [CourseArticleBlock] = []
 
         while cursor < lines.count {
             skipEmptyLines(lines, cursor: &cursor)
@@ -186,11 +200,11 @@ enum CourseContentParser {
     private static func parseTable(
         _ lines: [String],
         cursor: inout Int
-    ) throws -> OverviewTable {
+    ) throws -> CourseArticleTable {
         let headerLine = cursor
         let headers = tableCells(lines[cursor])
         guard headers.map({ $0.lowercased() }) == ["hangul", "note", "sound"] else {
-            throw error("Overview tables must use hangul | note | sound columns", line: cursor)
+            throw error("Course article tables must use hangul | note | sound columns", line: cursor)
         }
         cursor += 1
 
@@ -200,17 +214,17 @@ enum CourseContentParser {
         }
         cursor += 1
 
-        var rows: [OverviewTableRow] = []
+        var rows: [CourseArticleTableRow] = []
         while cursor < lines.count, isTableLine(lines[cursor]) {
             let cells = tableCells(lines[cursor])
             guard cells.count == 3 else {
                 throw error("Expected three table cells", line: cursor)
             }
 
-            let audio: OverviewAudio
+            let audio: CourseArticleAudio
             switch cells[2] {
             case "":
-                audio = .lookup
+                audio = .available
             case "-":
                 audio = .unavailable
             default:
@@ -221,7 +235,7 @@ enum CourseContentParser {
                 throw error("Hangul table cell cannot be empty", line: cursor)
             }
             rows.append(
-                OverviewTableRow(
+                CourseArticleTableRow(
                     hangul: cells[0],
                     note: cells[1],
                     audio: audio
@@ -231,9 +245,9 @@ enum CourseContentParser {
         }
 
         guard !rows.isEmpty else {
-            throw error("Overview table must contain at least one row", line: headerLine)
+            throw error("Course article table must contain at least one row", line: headerLine)
         }
-        return OverviewTable(rows: rows)
+        return CourseArticleTable(rows: rows)
     }
 
     private static func skipModule(_ lines: [String], cursor: inout Int) {

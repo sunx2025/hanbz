@@ -119,11 +119,11 @@ When “ㅇ” combines with a vowel, it forms a syllable. Because “ㅇ” is 
 | 우리     | we, our |       |
 
 #### Listen closely
-Notice how **ㄱ** and **ㄷ** sound different depending on where they appear in a word: **k/t** at the beginning, **g/d** in the middle.
+Notice how ㄱ and ㄷ sound different depending on where they appear in a word: k/t at the beginning, g/d in the middle.
 
 | hangul | note | sound |
 | ------ | :--: | :---: |
 | 누구     |  who   |       |
 | 오다     |  come  |       |
 | 가다     |  go   |       |
-| 어디     | where |       |
+| 어디로    | where |       |
