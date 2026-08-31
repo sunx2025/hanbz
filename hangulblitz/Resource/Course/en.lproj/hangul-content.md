@@ -110,19 +110,20 @@ When “ㅇ” combines with a vowel, it forms a syllable. Because “ㅇ” is 
 | 리      |  ri  |       |
 
 ### title.apply
-#### You can read
+#### Read these words
 
-| hangul |    note     | sound |
-| ------ | :---------: | :---: |
-| 우리     |   we, our   |       |
-| 나라     |   country   |       |
-| 다리     | leg; bridge |       |
+| hangul |  note  | sound |
+| ------ | :----: | :---: |
+| 나      | I, me |   -   |
+| 너      |  you  |   -   |
+| 우리     | we, our |       |
 
 #### Listen closely
 Notice how **ㄱ** and **ㄷ** sound different depending on where they appear in a word: **k/t** at the beginning, **g/d** in the middle.
 
 | hangul | note | sound |
 | ------ | :--: | :---: |
-| 가다     |  go  |       |
-| 도로     | road |       |
-| 누구     | who  |       |
+| 누구     |  who   |       |
+| 오다     |  come  |       |
+| 가다     |  go   |       |
+| 어디     | where |       |

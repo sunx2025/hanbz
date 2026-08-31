@@ -160,18 +160,31 @@ private struct OverviewTableRowView: View {
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
-            Button {
-                onPlayAudio(row.hangul)
-            } label: {
-                Image(systemName: "speaker.wave.2.fill")
-                    .imageScale(.small)
+//            Button {
+//                onPlayAudio(row.hangul)
+//            } label: {
+//                Image(systemName: "speaker.wave.2.fill")
+//                    .imageScale(.small)
+//            }
+//            .buttonStyle(.borderedProminent)
+//            .buttonBorderShape(.circle)
+//            .controlSize(.small)
+//            //.frame(width: 44, height: 44)
+//            .disabled(row.audio == .unavailable)
+//            .accessibilityLabel(accessibilityLabel)
+            if row.audio != .unavailable {
+                Button {
+                    onPlayAudio(row.hangul)
+                } label: {
+                    Image(systemName: "speaker.wave.2.fill")
+                        .imageScale(.small)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.circle)
+                .controlSize(.small)
+                //.frame(width: 44, height: 44)
+                .accessibilityLabel(accessibilityLabel)
             }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.circle)
-            .controlSize(.small)
-            //.frame(width: 44, height: 44)
-            .disabled(row.audio == .unavailable)
-            .accessibilityLabel(accessibilityLabel)
         }
         .padding(8)
         .frame(minHeight: 44)
