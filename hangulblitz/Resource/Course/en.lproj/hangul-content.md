@@ -127,3 +127,48 @@ Notice how ㄱ and ㄷ sound different depending on where they appear in a word:
 | 오다     |  come  |       |
 | 가다     |  go   |       |
 | 어디로    | where |       |
+
+# open-syllables-m-b
+## Basic Consonants ㅁ ㅂ
+ㅁ ㅂ and combinations
+
+### title.overview
+#### Basic Consonants ㅁ ㅂ
+> ㅂ can sound slightly different depending on where it appears, so it is written here as p/b. For now, just get familiar with its sound.
+
+| hangul | note | sound |
+| ------ | :--: | :---: |
+| ㅁ      |  m   |   -   |
+| ㅂ      |  p/b |   -   |
+
+#### Combined with Basic Vowels
+
+| hangul |  note   | sound |
+| ------ | :-----: | :---: |
+| 마      |  ma  |       |
+| 머      | meo  |       |
+| 모      |  mo  |       |
+| 무      |  mu  |       |
+| 므      | meu  |       |
+| 미      |  mi  |       |
+
+| hangul | note | sound |
+| ------ | :--: | :---: |
+| 바      | pa/ba |       |
+| 버      | peo/beo |       |
+| 보      | po/bo |       |
+| 부      | pu/bu |       |
+| 브      | peu/beu |       |
+| 비      | pi/bi |       |
+
+### title.apply
+#### Read these words and phrases
+Notice how ㅂ sounds different depending on where they appear in a word: p at the beginning, b in the middle.
+
+| hangul |  note  | sound |
+| ------ | :----: | :---: |
+| 보다    | see, watch |       |
+| 두부    |  tofu  |       |
+| 모르다   | not know |       |
+| 어디 가? | Where are you going? |       |
+| 바로 가  | Go now |       |

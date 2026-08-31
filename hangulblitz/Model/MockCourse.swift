@@ -44,7 +44,7 @@ enum MockCourse {
                     number: levelNumber,
                     title: localizedLevel?.title ?? copy.title,
                     description: localizedLevel?.description ?? copy.description,
-                    isAvailable: levelNumber <= 3,
+                    isAvailable: levelNumber <= 4,
                     overview: localizedLevel?.overview,
                     apply: localizedLevel?.apply,
                     currentActivities: activities(
@@ -286,7 +286,10 @@ enum MockCourse {
                         ["다", "더", "도", "두", "드", "디"],
                         ["라", "러", "로", "루", "르", "리"]
                     ],
-                    contrasts: []
+                    contrasts: [
+                        ["다", "라"], ["더", "러"],["도", "로"],
+                        ["두", "루"], ["드", "르"],["디", "리"]
+                    ]
                 ),
                 mixed: PracticeContent(
                     guided: [
@@ -306,7 +309,90 @@ enum MockCourse {
                         ["다", "더", "도", "두", "드", "디"],
                         ["라", "러", "로", "루", "르", "리"]
                     ],
-                    contrasts: []
+                    contrasts: [
+                        ["가", "나"], ["가", "다"], ["가", "라"],
+                        ["나", "다"], ["나", "라"], ["다", "라"],
+
+                        ["거", "너"], ["거", "더"], ["거", "러"],
+                        ["너", "더"], ["너", "러"], ["더", "러"],
+
+                        ["고", "노"], ["고", "도"], ["고", "로"],
+                        ["노", "도"], ["노", "로"], ["도", "로"],
+
+                        ["구", "누"], ["구", "두"], ["구", "루"],
+                        ["누", "두"], ["누", "루"], ["두", "루"],
+
+                        ["그", "느"], ["그", "드"], ["그", "르"],
+                        ["느", "드"], ["느", "르"], ["드", "르"],
+
+                        ["기", "니"], ["기", "디"], ["기", "리"],
+                        ["니", "디"], ["니", "리"], ["디", "리"]
+                    ]
+                )
+            )
+        case 4:
+            LevelPracticeContent(
+                current: PracticeContent(
+                    guided: [
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"],
+                        ["마", "바", "머", "버"],
+                        ["모", "보", "무", "부"],
+                        ["므", "브", "미", "비"]
+                    ],
+                    reading: [
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"]
+                    ],
+                    listening: [
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"]
+                    ],
+                    contrasts: [
+                        ["마", "바"], ["머", "버"], ["모", "보"],
+                        ["무", "부"], ["므", "브"], ["미", "비"]
+                    ]
+                ),
+                mixed: PracticeContent(
+                    guided: [
+                        ["다", "라", "마", "바"],
+                        ["더", "러", "머", "버"],
+                        ["도", "로", "모", "보"],
+                        ["두", "루", "무", "부"],
+                        ["드", "르", "므", "브"],
+                        ["디", "리", "미", "비"]
+                    ],
+                    reading: [
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"],
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"]
+                    ],
+                    listening: [
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"],
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"]
+                    ],
+                    contrasts: [
+                        ["다", "라"], ["다", "마"], ["다", "바"],
+                        ["라", "마"], ["라", "바"], ["마", "바"],
+
+                        ["더", "러"], ["더", "머"], ["더", "버"],
+                        ["러", "머"], ["러", "버"], ["머", "버"],
+
+                        ["도", "로"], ["도", "모"], ["도", "보"],
+                        ["로", "모"], ["로", "보"], ["모", "보"],
+
+                        ["두", "루"], ["두", "무"], ["두", "부"],
+                        ["루", "무"], ["루", "부"], ["무", "부"],
+
+                        ["드", "르"], ["드", "므"], ["드", "브"],
+                        ["르", "므"], ["르", "브"], ["므", "브"],
+
+                        ["디", "리"], ["디", "미"], ["디", "비"],
+                        ["리", "미"], ["리", "비"], ["미", "비"]
+                    ]
                 )
             )
         default:
@@ -314,7 +400,7 @@ enum MockCourse {
         }
     }
 
-    // Levels 4–9 keep the UI populated until their activity-by-activity mock data is defined.
+    // Levels 5–9 keep the UI populated until their activity-by-activity mock data is defined.
     private static func placeholderPracticeContent(levelNumber: Int) -> LevelPracticeContent {
         let sections = [placeholderItems(levelNumber: levelNumber)]
         let content = PracticeContent(
@@ -329,8 +415,6 @@ enum MockCourse {
 
     private static func placeholderItems(levelNumber: Int) -> [String] {
         switch levelNumber {
-        case 4:
-            ["ㅁ", "ㅂ", "마", "바", "머", "버", "모", "보", "무", "부"]
         case 5:
             ["가", "거", "고", "구", "그", "기", "나", "너", "노", "누"]
         case 6:
