@@ -110,23 +110,31 @@ When “ㅇ” combines with a vowel, it forms a syllable. Because “ㅇ” is 
 | 리      |  ri  |       |
 
 ### title.apply
-#### Read these words
+#### Read these words and phrases aloud
+> Notice how ㄱ and ㄷ can sound slightly different depending on where they appear in a word.
 
-| hangul |  note  | sound |
-| ------ | :----: | :---: |
-| 나      | I, me |   -   |
-| 너      |  you  |   -   |
-| 우리     | we, our |       |
+| hangul |   note   | sound |
+| ------ | :------: | :---: |
+| 누구     |   who    |       |
+| 나라     | country  |       |
+| 우리     | we / our |       |
+| 나이     |   age    |       |
+| 아이     |  child   |       |
 
-#### Listen closely
-Notice how ㄱ and ㄷ sound different depending on where they appear in a word: k/t at the beginning, g/d in the middle.
+| hangul |         note          | sound |
+| ------ | :-------------------: | :---: |
+| 오이     |       cucumber        |       |
+| 오다     |         come          |       |
+| 가다     |          go           |       |
+| 나오다    |       come out        |       |
+| 나가다    |        go out         |       |
+| 다니다    | attend / go regularly |       |
+| 다리     |     leg / bridge      |       |
+| 도로     |         road          |       |
+| 우리나라   |      our country      |       |
+| 어디 가?  | Where are you going?  |       |
 
-| hangul | note | sound |
-| ------ | :--: | :---: |
-| 누구     |  who   |       |
-| 오다     |  come  |       |
-| 가다     |  go   |       |
-| 어디로    | where |       |
+---
 
 # open-syllables-m-b
 ## Basic Consonants ㅁ ㅂ
@@ -162,13 +170,32 @@ Notice how ㄱ and ㄷ sound different depending on where they appear in a word:
 | 비      | pi/bi |       |
 
 ### title.apply
-#### Read these words and phrases
-Notice how ㅂ sounds different depending on where they appear in a word: p at the beginning, b in the middle.
+#### Read these words and phrases aloud
+> Notice how ㅂ can sound slightly different depending on where they appear in a word.
 
-| hangul |  note  | sound |
-| ------ | :----: | :---: |
-| 보다    | see, watch |       |
-| 두부    |  tofu  |       |
-| 모르다   | not know |       |
-| 어디 가? | Where are you going? |       |
-| 바로 가  | Go now |       |
+| hangul |     note     | sound |
+| ------ | :----------: | :---: |
+| 나무     |     tree     |       |
+| 머리     | head / hair  |       |
+| 모기     |   mosquito   |       |
+| 마루     |    floor     |       |
+| 바다     |     sea      |       |
+| 바나나    |    banana    |       |
+| 나비     |  butterfly   |       |
+| 두부     |     tofu     |       |
+| 부모     |   parents    |       |
+| 바보     | fool / silly |       |
+
+| hangul |         note          | sound |
+| ------ | :-------------------: | :---: |
+| 보리     |        barley         |       |
+| 미리     |      in advance       |       |
+| 바로     | right away / directly |       |
+| 너무     |      too / very       |       |
+| 모두     |    all / everyone     |       |
+| 아무     |          any          |       |
+| 마다     |     each / every      |       |
+| 보다     |      see / watch      |       |
+| 모르다    |       not know        |       |
+| 부르다    |      call / sing      |       |
+
