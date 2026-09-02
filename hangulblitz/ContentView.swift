@@ -117,8 +117,11 @@ struct ContentView: View {
         case .guided:
             let readingActivity = course
                 .level(id: presentedActivity.levelID)?
-                .currentActivities
-                .first { $0.kind == .reading }
+                .allActivities
+                .first {
+                    $0.kind == .reading &&
+                        $0.scope == presentedActivity.activity.scope
+                }
 
             GuidedPracticeView(
                 levelID: presentedActivity.levelID,

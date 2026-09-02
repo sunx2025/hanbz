@@ -69,19 +69,23 @@ struct LevelActivitiesContent: View {
                     }
                 }
 
-                sectionTitle(
-                    key: "section.current_level",
-                    comment: "Heading above activities that focus on the selected level."
-                )
+                if !level.currentActivities.isEmpty {
+                    sectionTitle(
+                        key: "section.current_level",
+                        comment: "Heading above activities that focus on the selected level."
+                    )
 
-                activityGrid(level.currentActivities)
+                    activityGrid(level.currentActivities)
+                }
 
-                sectionTitle(
-                    key: "section.mixed_review",
-                    comment: "Heading above activities that review the selected and earlier levels together."
-                )
+                if !level.mixedActivities.isEmpty {
+                    sectionTitle(
+                        key: "section.mixed_review",
+                        comment: "Heading above activities that review the selected and earlier levels together."
+                    )
 
-                activityGrid(level.mixedActivities)
+                    activityGrid(level.mixedActivities)
+                }
 
                 if level.apply != nil {
                     sectionTitle(

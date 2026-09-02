@@ -199,3 +199,13 @@ When “ㅇ” combines with a vowel, it forms a syllable. Because “ㅇ” is 
 | 모르다    |       not know        |       |
 | 부르다    |      call / sing      |       |
 
+---
+
+# basic-open-syllables-transfer-1
+## Mixed Practice I
+Review your learning in the recent levels
+
+### title.overview
+#### Mixed Review
+
+There is no new content in this level. You will review and consolidate what you learned over the previous four levels.

@@ -32,7 +32,12 @@ struct GuidedPracticeView: View {
         self.activity = activity
         self.readingActivity = readingActivity
         _progress = progress
-        _session = State(initialValue: GuidedPracticeSession(activity: activity))
+        _session = State(
+            initialValue: GuidedPracticeSession(
+                activity: activity,
+                readingActivity: readingActivity
+            )
+        )
     }
 
     var body: some View {

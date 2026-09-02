@@ -35,7 +35,7 @@ final class GuidedPracticeSession {
     private(set) var isComplete = false
     private(set) var configurationError: String?
 
-    init(activity: LearningActivity) {
+    init(activity: LearningActivity, readingActivity: LearningActivity?) {
         let nonemptySections = activity.itemSections.filter { !$0.isEmpty }
         sourceSections = nonemptySections
         sections = nonemptySections.map { section in
@@ -43,10 +43,20 @@ final class GuidedPracticeSession {
         }
 
         if nonemptySections.isEmpty {
-            let message = "No items found"
-            configurationError = message
-            Self.logger.error("\(message, privacy: .public) for activity \(activity.id, privacy: .public)")
+            reportConfigurationError("No items found", activityID: activity.id)
+        } else if readingActivity == nil {
+            reportConfigurationError(
+                "No \(activity.scope.rawValue) reading activity found",
+                activityID: activity.id
+            )
         }
+    }
+
+    private func reportConfigurationError(_ message: String, activityID: String) {
+        configurationError = message
+        Self.logger.error(
+            "\(message, privacy: .public) for activity \(activityID, privacy: .public)"
+        )
     }
 
     var currentItem: GuidedPracticeItem? {

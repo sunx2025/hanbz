@@ -44,7 +44,7 @@ enum MockCourse {
                     number: levelNumber,
                     title: localizedLevel?.title ?? copy.title,
                     description: localizedLevel?.description ?? copy.description,
-                    isAvailable: levelNumber <= 4,
+                    isAvailable: levelNumber <= 5,
                     overview: localizedLevel?.overview,
                     apply: localizedLevel?.apply,
                     currentActivities: activities(
@@ -395,6 +395,40 @@ enum MockCourse {
                     ]
                 )
             )
+        case 5:
+            LevelPracticeContent(
+                current: nil,
+                mixed: PracticeContent(
+                    guided: [
+                        ["아", "어", "오", "우", "으", "이"],
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"],
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"],
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"]
+                    ],
+                    reading: [
+                        ["아", "어", "오", "우", "으", "이"],
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"],
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"],
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"]
+                    ],
+                    listening: [
+                        ["아", "어", "오", "우", "으", "이"],
+                        ["가", "거", "고", "구", "그", "기"],
+                        ["나", "너", "노", "누", "느", "니"],
+                        ["다", "더", "도", "두", "드", "디"],
+                        ["라", "러", "로", "루", "르", "리"],
+                        ["마", "머", "모", "무", "므", "미"],
+                        ["바", "버", "보", "부", "브", "비"]
+                    ],
+                    contrasts: []
+                )
+            )
         default:
             placeholderPracticeContent(levelNumber: levelNumber)
         }
@@ -415,8 +449,6 @@ enum MockCourse {
 
     private static func placeholderItems(levelNumber: Int) -> [String] {
         switch levelNumber {
-        case 5:
-            ["가", "거", "고", "구", "그", "기", "나", "너", "노", "누"]
         case 6:
             ["ㅑ", "ㅕ", "ㅛ", "ㅠ", "야", "여", "요", "유"]
         case 7:
@@ -472,10 +504,10 @@ enum MockCourse {
         LevelCopy(title: "基础辅音 ㄱ ㄴ", description: "ㄱ ㄴ及其拼读"),
         LevelCopy(title: "基础辅音 ㄷ ㄹ", description: "ㄷ ㄹ及其拼读"),
         LevelCopy(title: "基础辅音 ㅁ ㅂ", description: "ㅁ ㅂ及其拼读"),
-        LevelCopy(title: "综合拼读（一）", description: "가 거 고 구 그 기等"),
+        LevelCopy(title: "综合练习（一）", description: "가 거 고 구 그 기等"),
         LevelCopy(title: "Y系列元音 ㅑ ㅕ ㅛ ㅠ", description: "ㅑ ㅕ ㅛ ㅠ"),
-        LevelCopy(title: "综合拼读（二）", description: "가 겨 교 규等"),
+        LevelCopy(title: "综合练习（二）", description: "가 겨 교 규等"),
         LevelCopy(title: "基础辅音 ㅅ ㅈ ㅎ", description: "ㅅ ㅈ ㅎ及其拼读"),
-        LevelCopy(title: "综合拼读（三）", description: "사 서 소 수 스 시 샤 셔 쇼 슈等")
+        LevelCopy(title: "综合练习（三）", description: "사 서 소 수 스 시 샤 셔 쇼 슈等")
     ]
 }
