@@ -41,13 +41,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apply your learning"
+            "value" : "Combine letters to read real words and phrases"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "学以致用"
+            "value" : "运用所学 拼读真实词句"
           }
         }
       }
@@ -58,13 +58,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Words & Phrases"
+            "value" : "Read Real Words"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "词语与短句"
+            "value" : "韩文认读"
           }
         }
       }
@@ -76,13 +76,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Link this level with earlier patterns"
+            "value" : "Combine current letters with recent ones"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "联系本课与前几课的内容"
+            "value" : "融合本课与近期所学字母"
           }
         }
       }
@@ -94,13 +94,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Make Connections"
+            "value" : "Review Recent Letters"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "建立联系"
+            "value" : "温故知新"
           }
         }
       }
@@ -112,13 +112,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Learn this level’s pattern"
+            "value" : "See and hear new letters for the first time"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "熟悉本课的内容"
+            "value" : "观形听音 熟悉本课字母"
           }
         }
       }
@@ -130,13 +130,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Get Familiar"
+            "value" : "Meet New Letters"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "初步练习"
+            "value" : "初识新字"
           }
         }
       }
@@ -148,13 +148,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Practise symbols introduced in this level"
+            "value" : "Hear the sound and pick the right letter"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "练习本课引入的生字"
+            "value" : "听到读音 选择正确字母"
           }
         }
       }
@@ -166,13 +166,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Listening Practice"
+            "value" : "Listen & Match"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "听音训练"
+            "value" : "听音辨字"
           }
         }
       }
@@ -184,13 +184,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recognise mixed audio up to this level"
+            "value" : "Test listening across recent letters"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "辨认本课与前几课的文字发音"
+            "state" : "needs_review",
+            "value" : "检验本课与近期字母听力"
           }
         }
       }
@@ -202,13 +202,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mixed Listening Practice"
+            "value" : "Mixed Listening"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "混合听音训练"
+            "value" : "混合听辨"
           }
         }
       }
@@ -220,13 +220,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Read mixed items up to this level"
+            "value" : "Practice reading recent and new letters"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "认读本课及前几课的生字"
+            "value" : "认读本课与近期所学字母"
           }
         }
       }
@@ -238,13 +238,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mixed Reading Practice"
+            "value" : "Mixed Reading"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "混合认读训练"
+            "value" : "混合认读"
           }
         }
       }
@@ -278,7 +278,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "知识点"
+            "value" : "课程概览"
           }
         }
       }
@@ -290,13 +290,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Practise symbols introduced in this level"
+            "value" : "See the letter and say the sound"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "练习本课引入的生字"
+            "value" : "看到字母 回想并读出读音"
           }
         }
       }
@@ -307,13 +307,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reading Practice"
+            "value" : "Read & Recall"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "认读训练"
+            "value" : "看字发音"
           }
         }
       }
@@ -352,6 +352,10 @@
         }
       }
     },
+    "Combine current letters with recent ones" : {
+      "comment" : "Text displayed in a notification when a user is not a member.",
+      "isCommentAutoGenerated" : true
+    },
     "common.cancel" : {
       "comment" : "Button that dismisses a confirmation without making changes.",
       "localizations" : {
@@ -368,10 +372,6 @@
           }
         }
       }
-    },
-    "Get Familiar" : {
-      "comment" : "Title of a guided activity that introduces the user to the symbols of a given level.",
-      "isCommentAutoGenerated" : true
     },
     "guided.completion.learn_again" : {
       "comment" : "Button that restarts guided practice from the beginning.",
@@ -497,8 +497,8 @@
       "comment" : "The name of the app.",
       "isCommentAutoGenerated" : true
     },
-    "Learn this level’s pattern" : {
-      "comment" : "Description of a guided activity for a given level.",
+    "Hear the sound and pick the right letter" : {
+      "comment" : "Description of a learning activity for listening practice.",
       "isCommentAutoGenerated" : true
     },
     "level.availability.coming_soon" : {
@@ -586,12 +586,8 @@
         }
       }
     },
-    "Link this level with earlier patterns" : {
-      "comment" : "Text displayed in a learning activity when the user is learning to make connections between patterns.",
-      "isCommentAutoGenerated" : true
-    },
-    "Listening Practice" : {
-      "comment" : "Title of a learning activity for listening practice.",
+    "Listen & Match" : {
+      "comment" : "Title of a listening practice activity.",
       "isCommentAutoGenerated" : true
     },
     "listening.action.continue" : {
@@ -1002,8 +998,8 @@
         }
       }
     },
-    "Make Connections" : {
-      "comment" : "Title of a learning activity that links a level with earlier patterns.",
+    "Meet New Letters" : {
+      "comment" : "Title of a practice activity that introduces new letters.",
       "isCommentAutoGenerated" : true
     },
     "menu.accessibility_label" : {
@@ -1125,12 +1121,12 @@
         }
       }
     },
-    "Mixed Listening Practice" : {
-      "comment" : "Title of a learning activity that combines reading and listening.",
+    "Mixed Listening" : {
+      "comment" : "Title of a practice activity for mixed practice.",
       "isCommentAutoGenerated" : true
     },
-    "Mixed Reading Practice" : {
-      "comment" : "Title of a learning activity that combines reading practice with items from this level.",
+    "Mixed Reading" : {
+      "comment" : "Title of a practice activity for mixed reading.",
       "isCommentAutoGenerated" : true
     },
     "overview.audio.play" : {
@@ -1149,6 +1145,10 @@
           }
         }
       }
+    },
+    "Practice reading recent and new letters" : {
+      "comment" : "Title and description of a practice activity for mixed reading.",
+      "isCommentAutoGenerated" : true
     },
     "practice.audio.issue.duplicate" : {
       "comment" : "Toast shown when multiple bundled audio files match the same Korean practice item. The placeholder is the Korean text.",
@@ -1303,10 +1303,6 @@
         }
       }
     },
-    "Practise symbols introduced in this level" : {
-      "comment" : "Description of the reading practice activity.",
-      "isCommentAutoGenerated" : true
-    },
     "progress.accessibility_label %lf %lld" : {
       "comment" : "Accessibility description for a progress indicator. The first value is progress and the second is the maximum.",
       "localizations" : {
@@ -1324,12 +1320,8 @@
         }
       }
     },
-    "Read mixed items up to this level" : {
-      "comment" : "Description of a mixed reading activity.",
-      "isCommentAutoGenerated" : true
-    },
-    "Reading Practice" : {
-      "comment" : "Title of a reading practice activity.",
+    "Read & Recall" : {
+      "comment" : "Title of a reading activity.",
       "isCommentAutoGenerated" : true
     },
     "reading.action.check_answer" : {
@@ -1791,8 +1783,8 @@
         }
       }
     },
-    "Recognise mixed audio up to this level" : {
-      "comment" : "Description of a mixed listening activity.",
+    "Review Recent Letters" : {
+      "comment" : "Title of a practice activity for reviewing letters that were recently practiced.",
       "isCommentAutoGenerated" : true
     },
     "section.current_level" : {
@@ -1807,7 +1799,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当前课程"
+            "value" : "本课练习"
           }
         }
       }
@@ -1824,7 +1816,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拓展"
+            "value" : "延伸拓展"
           }
         }
       }
@@ -1845,6 +1837,17 @@
           }
         }
       }
+    },
+    "See and hear new letters for the first time" : {
+      "comment" : "Description of a practice activity for new letters.",
+      "isCommentAutoGenerated" : true
+    },
+    "See the letter and say the sound" : {
+      "comment" : "Description of a practice activity where the user has to read letters.",
+      "isCommentAutoGenerated" : true
+    },
+    "Test listening across recent letters" : {
+
     }
   },
   "version" : "1.1"

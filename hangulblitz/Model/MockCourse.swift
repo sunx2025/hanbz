@@ -157,49 +157,49 @@ enum MockCourse {
             ActivityCopy(
                 idSuffix: "get-familiar",
                 titleKey: "activity.get_familiar.title",
-                title: "Get Familiar",
+                title: "Meet New Letters",
                 descriptionKey: "activity.get_familiar.description",
-                description: "Learn this level’s pattern"
+                description: "See and hear new letters for the first time"
             )
         case (.current, .reading):
             ActivityCopy(
                 idSuffix: "reading",
                 titleKey: "activity.reading.title",
-                title: "Reading Practice",
+                title: "Read & Recall",
                 descriptionKey: "activity.reading.description",
-                description: "Practise symbols introduced in this level"
+                description: "See the letter and say the sound"
             )
         case (.current, .listening):
             ActivityCopy(
                 idSuffix: "listening",
                 titleKey: "activity.listening.title",
-                title: "Listening Practice",
+                title: "Listen & Match",
                 descriptionKey: "activity.listening.description",
-                description: "Practise symbols introduced in this level"
+                description: "Hear the sound and pick the right letter"
             )
         case (.mixed, .guided):
             ActivityCopy(
                 idSuffix: "connections",
                 titleKey: "activity.connections.title",
-                title: "Make Connections",
+                title: "Review Recent Letters",
                 descriptionKey: "activity.connections.description",
-                description: "Link this level with earlier patterns"
+                description: "Combine current letters with recent ones"
             )
         case (.mixed, .reading):
             ActivityCopy(
                 idSuffix: "mixed-reading",
                 titleKey: "activity.mixed_reading.title",
-                title: "Mixed Reading Practice",
+                title: "Mixed Reading",
                 descriptionKey: "activity.mixed_reading.description",
-                description: "Read mixed items up to this level"
+                description: "Practice reading recent and new letters"
             )
         case (.mixed, .listening):
             ActivityCopy(
                 idSuffix: "mixed-listening",
                 titleKey: "activity.mixed_listening.title",
-                title: "Mixed Listening Practice",
+                title: "Mixed Listening",
                 descriptionKey: "activity.mixed_listening.description",
-                description: "Recognise mixed audio up to this level"
+                description: "Test listening across recent letters"
             )
         }
     }
