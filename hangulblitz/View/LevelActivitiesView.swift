@@ -26,6 +26,19 @@ struct LevelActivitiesView: View {
         }
         .navigationTitle(level.displayTitle(locale: locale))
         .navigationBarTitleDisplayMode(.inline)
+#if DEBUG
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                // Comment out this NavigationLink to hide the temporary debug entry.
+                NavigationLink {
+                    LevelProgressDebugView(level: level, progress: progress)
+                } label: {
+                    Image(systemName: "doc.badge.gearshape")
+                }
+                .accessibilityLabel("Open level progress debug view")
+            }
+        }
+#endif
     }
 
     private func columnCount(for availableWidth: CGFloat) -> Int {
