@@ -118,7 +118,8 @@ struct ListeningPracticeView: View {
                 )
             case .completed:
                 ListeningPracticeCompletionView(
-                    score: session.practiceScore,
+                    practicePerformance: session.practiceScore,
+                    overallRating: overallRating,
                     messageKey: completionMessageKey,
                     practiseAgain: restart
                 )
@@ -235,6 +236,14 @@ struct ListeningPracticeView: View {
         default:
             return "listening.completion.keep_practising"
         }
+    }
+
+    private var overallRating: Double? {
+        ActivityDisplayProgress(
+            activity: activity,
+            levelID: levelID,
+            userProgress: progress
+        )?.score
     }
 
     private func startOnce() {
@@ -749,7 +758,8 @@ private struct ListeningPracticePausedView: View {
 }
 
 private struct ListeningPracticeCompletionView: View {
-    let score: Double
+    let practicePerformance: Double
+    let overallRating: Double?
     let messageKey: LocalizedStringKey
     let practiseAgain: () -> Void
 
@@ -761,7 +771,7 @@ private struct ListeningPracticeCompletionView: View {
                     Text(messageKey)
                         .font(.title2.weight(.semibold))
                         .multilineTextAlignment(.center)
-                    PracticeScoreBar(score: score)
+                    PracticeScoreBar(score: practicePerformance)
                         .frame(maxWidth: 440)
                     Spacer()
                 }
@@ -769,19 +779,17 @@ private struct ListeningPracticeCompletionView: View {
 
                 VStack(spacing: 24) {
                     Spacer()
-                    HStack(spacing: 8) {
-                        Text(
-                            "listening.completion.practice_score",
-                            comment: "Label before the listening practice score circles."
-                        )
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    if let overallRating {
+                        HStack(spacing: 8) {
+                            Text(
+                                "practice.completion.overall_rating",
+                                comment: "Label before the activity's overall long-term rating."
+                            )
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
 
-                        MasteryIndicator(
-                            value: min(score, 5),
-                            shape: .circle,
-                            showsBlitz: score >= ProgressPolicy.blitzThreshold
-                        )
+                            MasteryIndicator(value: overallRating)
+                        }
                     }
 
                     AppButton(style: .filled, size: .medium, action: practiseAgain) {

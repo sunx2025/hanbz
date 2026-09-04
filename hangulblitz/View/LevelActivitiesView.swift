@@ -133,18 +133,10 @@ struct LevelActivitiesContent: View {
     }
 
     private func displayProgress(for activity: LearningActivity) -> ActivityDisplayProgress? {
-        let state = progress.levels[level.id] ?? LevelLearningState()
-        let activityProgress = ActivityProgress(
+        ActivityDisplayProgress(
             activity: activity,
             levelID: level.id,
-            state: state
-        )
-
-        guard activityProgress.hasAttempt else { return nil }
-        return ActivityDisplayProgress(
-            hasAttempt: true,
-            isCompleted: activityProgress.isCompleted,
-            score: activityProgress.mastery
+            userProgress: progress
         )
     }
 

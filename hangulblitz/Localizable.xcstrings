@@ -396,13 +396,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You’re getting familiar with these characters.\nNow try reading them from memory."
+            "value" : "You’re getting familiar with these letters.\nNow try reading them from memory."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你已经熟悉了这些生字。\n现在可以试着凭记忆认读出来。"
+            "value" : "你已经熟悉了这些字母。\n现在可以试着凭记忆认读出来。"
           }
         }
       }
@@ -709,36 +709,19 @@
         }
       }
     },
-    "listening.completion.practice_score" : {
-      "comment" : "Label before the listening practice score circles.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice Score:"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "练习得分："
-          }
-        }
-      }
-    },
     "listening.get_ready.instruction" : {
       "comment" : "Instruction shown above the listening practice get-ready lights.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Listen and choose the correct answer as fast as you can"
+            "value" : "Listen and choose the matching letter as fast as you can"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "听音频并以最快速度选择正确答案"
+            "value" : "听到读音后，尽快选出对应的字母"
           }
         }
       }
@@ -800,13 +783,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Listen carefully, recognise the sound, and pick the correct Hangul character before time runs out."
+            "value" : "Listen carefully, recognise the sound, and pick the correct Hangul letter before time runs out."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "听音频的发音，在时间结束前，尽快选择正确的韩文字符。"
+            "value" : "听音频的发音，在时间结束前，尽快选择正确的韩文字母。"
           }
         }
       }
@@ -1218,6 +1201,23 @@
         }
       }
     },
+    "practice.completion.overall_rating" : {
+      "comment" : "Label before the activity's overall long-term rating.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overall Rating"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "综合评分"
+          }
+        }
+      }
+    },
     "practice.completion.score.accessibility_label" : {
       "comment" : "Accessibility label for the score position shown on a scored practice completion bar.",
       "localizations" : {
@@ -1494,36 +1494,19 @@
         }
       }
     },
-    "reading.completion.practice_score" : {
-      "comment" : "Label before the reading practice score circles.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice Score:"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "练习得分："
-          }
-        }
-      }
-    },
     "reading.get_ready.instruction" : {
       "comment" : "Instruction shown above the reading practice get-ready lights.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Read aloud as fast as you can"
+            "value" : "Read each letter aloud as fast as you can"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请尽快读出"
+            "value" : "看到字母，尽快大声读出它的发音"
           }
         }
       }
@@ -1585,13 +1568,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your goal is to recognise each Hangul character and say it aloud as quickly as you can."
+            "value" : "Your goal is to recognise each Hangul letter and say it aloud as quickly as you can."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "目标是以最快的速度认出每个韩文字符，并读出。"
+            "value" : "目标是以最快的速度认出每个韩文字母，并读出他们的正确发音。"
           }
         }
       }
@@ -1619,13 +1602,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Say the character aloud as soon as you recognise it."
+            "value" : "Say the  letter aloud as soon as you recognise it."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "认出字符后立即大声读出。"
+            "value" : "认出字母后立即大声读出。"
           }
         }
       }

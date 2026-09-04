@@ -119,7 +119,8 @@ struct ReadingPracticeView: View {
                 )
             case .completed:
                 ReadingPracticeCompletionView(
-                    score: session.practiceScore,
+                    practicePerformance: session.practiceScore,
+                    overallRating: overallRating,
                     messageKey: completionMessageKey,
                     practiseAgain: restart
                 )
@@ -271,6 +272,14 @@ struct ReadingPracticeView: View {
         default:
             return "reading.completion.keep_practising"
         }
+    }
+
+    private var overallRating: Double? {
+        ActivityDisplayProgress(
+            activity: activity,
+            levelID: levelID,
+            userProgress: progress
+        )?.score
     }
 
     private func startOnce() {
@@ -701,7 +710,8 @@ private struct ReadingPracticePausedView: View {
 }
 
 private struct ReadingPracticeCompletionView: View {
-    let score: Double
+    let practicePerformance: Double
+    let overallRating: Double?
     let messageKey: LocalizedStringKey
     let practiseAgain: () -> Void
 
@@ -715,7 +725,7 @@ private struct ReadingPracticeCompletionView: View {
                         .font(.title2.weight(.semibold))
                         .multilineTextAlignment(.center)
 
-                    PracticeScoreBar(score: score)
+                    PracticeScoreBar(score: practicePerformance)
                         .frame(maxWidth: 440)
 
                     Spacer()
@@ -725,19 +735,17 @@ private struct ReadingPracticeCompletionView: View {
                 VStack(spacing: 24) {
                     Spacer()
 
-                    HStack(spacing: 8) {
-                        Text(
-                            "reading.completion.practice_score",
-                            comment: "Label before the reading practice score circles."
-                        )
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                    if let overallRating {
+                        HStack(spacing: 8) {
+                            Text(
+                                "practice.completion.overall_rating",
+                                comment: "Label before the activity's overall long-term rating."
+                            )
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
 
-                        MasteryIndicator(
-                            value: min(score, 5),
-                            shape: .circle,
-                            showsBlitz: score >= ProgressPolicy.blitzThreshold
-                        )
+                            MasteryIndicator(value: overallRating)
+                        }
                     }
 
                     AppButton(style: .filled, size: .medium, action: practiseAgain) {
@@ -836,7 +844,8 @@ private extension Duration {
         close: {}
     ) {
         ReadingPracticeCompletionView(
-            score: 4.4,
+            practicePerformance: 4.4,
+            overallRating: 2.5,
             messageKey: "reading.completion.nice_progress",
             practiseAgain: {}
         )

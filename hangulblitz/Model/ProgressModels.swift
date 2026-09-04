@@ -277,6 +277,27 @@ struct ActivityProgress {
     }
 }
 
+extension ActivityDisplayProgress {
+    init?(
+        activity: LearningActivity,
+        levelID: String,
+        userProgress: UserProgress
+    ) {
+        let activityProgress = ActivityProgress(
+            activity: activity,
+            levelID: levelID,
+            state: userProgress.levels[levelID] ?? LevelLearningState()
+        )
+
+        guard activityProgress.hasAttempt else { return nil }
+        self.init(
+            hasAttempt: true,
+            isCompleted: activityProgress.isCompleted,
+            score: activityProgress.mastery
+        )
+    }
+}
+
 // Level progress is a snapshot derived from its scored activities.
 struct LevelProgress {
     // Normal progress and Blitz deliberately express different achievements.
