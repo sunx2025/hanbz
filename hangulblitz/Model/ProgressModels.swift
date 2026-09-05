@@ -96,25 +96,101 @@ struct LevelItemProgress: Codable {
     var listening = ListeningItemProgress()
 }
 
+struct ScopePracticeCounts: Codable, Equatable {
+    var current = 0
+    var mixed = 0
+
+    subscript(scope: PracticeScope) -> Int {
+        get {
+            switch scope {
+            case .current: current
+            case .mixed: mixed
+            }
+        }
+        set {
+            switch scope {
+            case .current: current = newValue
+            case .mixed: mixed = newValue
+            }
+        }
+    }
+
+    var total: Int {
+        current + mixed
+    }
+
+    init() {}
+
+    init(scopes: [PracticeScope]) {
+        for scope in scopes {
+            self[scope] += 1
+        }
+    }
+}
+
 struct ReadingItemProgress: Codable {
     var mastery: Double?
     var attempts: [ReadingAttempt] = []
+    var practiceCountByScope = ScopePracticeCounts()
 
     mutating func record(_ attempt: ReadingAttempt) {
         attempts.append(attempt)
         attempts.keepMostRecent(ProgressPolicy.maximumAttemptHistory)
         mastery = attempts.map(\.score).average
+        practiceCountByScope[attempt.scope] += 1
+    }
+
+    init() {}
+
+    private enum CodingKeys: String, CodingKey {
+        case mastery
+        case attempts
+        case practiceCountByScope
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        mastery = try container.decodeIfPresent(Double.self, forKey: .mastery)
+        attempts = try container.decodeIfPresent([ReadingAttempt].self, forKey: .attempts) ?? []
+        // Older saves have no lifetime counter. Their retained attempts are
+        // the strongest coverage evidence still available during migration.
+        practiceCountByScope = try container.decodeIfPresent(
+            ScopePracticeCounts.self,
+            forKey: .practiceCountByScope
+        ) ?? ScopePracticeCounts(scopes: attempts.map(\.scope))
     }
 }
 
 struct ListeningItemProgress: Codable {
     var mastery: Double?
     var attempts: [ListeningAttempt] = []
+    var practiceCountByScope = ScopePracticeCounts()
 
     mutating func record(_ attempt: ListeningAttempt) {
         attempts.append(attempt)
         attempts.keepMostRecent(ProgressPolicy.maximumAttemptHistory)
         mastery = attempts.map(\.score).average
+        practiceCountByScope[attempt.scope] += 1
+    }
+
+    init() {}
+
+    private enum CodingKeys: String, CodingKey {
+        case mastery
+        case attempts
+        case practiceCountByScope
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        mastery = try container.decodeIfPresent(Double.self, forKey: .mastery)
+        attempts = try container.decodeIfPresent([ListeningAttempt].self, forKey: .attempts) ?? []
+        // Older saves have no lifetime counter. Their retained attempts are
+        // the strongest coverage evidence still available during migration.
+        practiceCountByScope = try container.decodeIfPresent(
+            ScopePracticeCounts.self,
+            forKey: .practiceCountByScope
+        ) ?? ScopePracticeCounts(scopes: attempts.map(\.scope))
     }
 }
 
@@ -201,6 +277,15 @@ struct ActivityProgress {
     let hasAttempt: Bool
     let isCompleted: Bool
 
+    var effectiveProgress: Double {
+        guard hasAttempt else { return 0 }
+        let masteryProgress = min(
+            max((mastery ?? 0) / ProgressPolicy.masteryFullScore, 0),
+            1
+        )
+        return min(masteryProgress, scopeEvidenceCoverage)
+    }
+
     init(
         activity: LearningActivity,
         levelID: String,
@@ -235,19 +320,19 @@ struct ActivityProgress {
         case .reading:
             masteryValues = itemProgresses.map { $0?.reading.mastery ?? 0 }
             practisedItems = itemProgresses.map { progress in
-                !(progress?.reading.attempts.isEmpty ?? true)
+                (progress?.reading.practiceCountByScope.total ?? 0) > 0
             }
             scopeEvidenceItems = itemProgresses.map { progress in
-                progress?.reading.attempts.contains { $0.scope == activity.scope } ?? false
+                (progress?.reading.practiceCountByScope[activity.scope] ?? 0) > 0
             }
 
         case .listening:
             masteryValues = itemProgresses.map { $0?.listening.mastery ?? 0 }
             practisedItems = itemProgresses.map { progress in
-                !(progress?.listening.attempts.isEmpty ?? true)
+                (progress?.listening.practiceCountByScope.total ?? 0) > 0
             }
             scopeEvidenceItems = itemProgresses.map { progress in
-                progress?.listening.attempts.contains { $0.scope == activity.scope } ?? false
+                (progress?.listening.practiceCountByScope[activity.scope] ?? 0) > 0
             }
 
         case .guided:
@@ -301,10 +386,10 @@ extension ActivityDisplayProgress {
 // Level progress is a snapshot derived from its scored activities.
 struct LevelProgress {
     // Normal progress and Blitz deliberately express different achievements.
-    // Each activity first caps at 100% (score 5) before the level average is
-    // calculated. Its score above 5 therefore cannot compensate for another
-    // activity below 5. Level Blitz is awarded separately only when every
-    // valid scored activity has itself reached the Blitz threshold.
+    // Each activity first caps mastery at 100% (score 5), then applies its
+    // scope coverage as a gate. A high score therefore cannot compensate for
+    // unpractised items or another weak activity. Level Blitz is awarded only
+    // when every valid scored activity is fully covered and reaches Blitz.
     let standardProgress: Double?
     let isBlitz: Bool
     let hasAttempt: Bool
@@ -333,14 +418,13 @@ struct LevelProgress {
         hasAttempt = validProgresses.contains(where: \.hasAttempt)
 
         let activityFractions = validProgresses.map { progress in
-            guard progress.hasAttempt else { return 0.0 }
-            let score = progress.mastery ?? 0
-            return min(max(score / ProgressPolicy.masteryFullScore, 0), 1)
+            progress.effectiveProgress
         }
         standardProgress = hasAttempt ? activityFractions.average : nil
 
         isBlitz = !validProgresses.isEmpty && validProgresses.allSatisfy { progress in
             progress.hasAttempt &&
+                progress.scopeEvidenceCoverage == 1 &&
                 (progress.mastery ?? 0) >= ProgressPolicy.blitzThreshold
         }
         coverage = validProgresses.map(\.coverage).average ?? 0

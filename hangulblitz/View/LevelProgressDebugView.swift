@@ -126,9 +126,11 @@ struct LevelProgressDebugView: View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
                 Text("Item")
-                    .frame(width: 44, alignment: .leading)
+                    .frame(width: 32, alignment: .center)
                 Text("Avg")
-                    .frame(width: 44, alignment: .trailing)
+                    .frame(width: 32, alignment: .center)
+                Text("Count")
+                    .frame(width: 72, alignment: .center)
                 Text("Attempts (oldest → newest)")
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -162,12 +164,13 @@ struct LevelProgressDebugView: View {
     private func itemRow(_ item: String) -> some View {
         let itemProgress = levelState.items[LevelItemID(levelID: level.id, text: item)]
         let mastery = itemMastery(itemProgress)
+        let counts = practiceCounts(itemProgress)
         let attempts = attemptTokens(itemProgress)
 
         return HStack(spacing: 12) {
             Text(item)
                 .font(.headline)
-                .frame(width: 44, alignment: .leading)
+                .frame(width: 32, alignment: .center)
 
             Group {
                 if let mastery {
@@ -178,7 +181,12 @@ struct LevelProgressDebugView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 44, alignment: .trailing)
+            .frame(width: 32, alignment: .center)
+
+            Text("C\(counts.current) M\(counts.mixed)")
+                .font(.caption)
+                .monospacedDigit()
+                .frame(width: 72, alignment: .center)
 
             if attempts.isEmpty {
                 Text("—")
@@ -233,6 +241,15 @@ struct LevelProgressDebugView: View {
             progress?.reading.mastery
         case .listening:
             progress?.listening.mastery
+        }
+    }
+
+    private func practiceCounts(_ progress: LevelItemProgress?) -> ScopePracticeCounts {
+        switch mode {
+        case .reading:
+            progress?.reading.practiceCountByScope ?? ScopePracticeCounts()
+        case .listening:
+            progress?.listening.practiceCountByScope ?? ScopePracticeCounts()
         }
     }
 

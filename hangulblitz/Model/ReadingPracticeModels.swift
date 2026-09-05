@@ -52,7 +52,8 @@ final class ReadingPracticeSession {
     let activity: LearningActivity
     let timeout: TimeInterval
 
-    private let selectedItems: [ReadingPracticeItem]
+    private let availableTexts: [String]
+    private var selectedItems: [ReadingPracticeItem]
     private var historicalScores: [String: Double]
 
     private(set) var items: [ReadingPracticeItem]
@@ -81,9 +82,16 @@ final class ReadingPracticeSession {
             .map(PracticeAudioCatalog.normalizedText)
             .filter { !$0.isEmpty && seen.insert($0).inserted }
 
-        let selectedItems = uniqueTexts.map(ReadingPracticeItem.init)
+        availableTexts = uniqueTexts
+        let selectedItems = PracticeRoundSampler.select(
+            texts: uniqueTexts,
+            levelID: levelID,
+            kind: activity.kind,
+            scope: activity.scope,
+            progress: progress
+        ).map(ReadingPracticeItem.init)
         self.selectedItems = selectedItems
-        items = selectedItems.shuffled()
+        items = selectedItems
 
         historicalScores = Self.historicalScores(
             for: selectedItems,
@@ -216,12 +224,19 @@ final class ReadingPracticeSession {
 
     func restart(progress: UserProgress) {
         sessionID = UUID()
+        selectedItems = PracticeRoundSampler.select(
+            texts: availableTexts,
+            levelID: levelID,
+            kind: activity.kind,
+            scope: activity.scope,
+            progress: progress
+        ).map(ReadingPracticeItem.init)
         historicalScores = Self.historicalScores(
             for: selectedItems,
             levelID: levelID,
             progress: progress
         )
-        items = shuffledDifferently(from: items)
+        items = selectedItems
         currentIndex = 0
         submissions = []
         clearPendingAnswer()
@@ -258,21 +273,6 @@ final class ReadingPracticeSession {
     private func clearPendingAnswer() {
         pendingRecallTime = nil
         pendingTimedOutAttempt = nil
-    }
-
-    private func shuffledDifferently(
-        from previousOrder: [ReadingPracticeItem]
-    ) -> [ReadingPracticeItem] {
-        guard selectedItems.count > 1 else { return selectedItems }
-
-        for _ in 0..<5 {
-            let candidate = selectedItems.shuffled()
-            if candidate != previousOrder {
-                return candidate
-            }
-        }
-
-        return Array(previousOrder.dropFirst()) + previousOrder.prefix(1)
     }
 
     private static func historicalScores(

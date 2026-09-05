@@ -56,7 +56,8 @@ final class ListeningPracticeSession {
     let activity: LearningActivity
     let timeout: TimeInterval
 
-    private let selectedTexts: [String]
+    private let availableTexts: [String]
+    private var selectedTexts: [String]
     private var historicalScores: [String: Double]
 
     private(set) var items: [ListeningPracticeItem]
@@ -82,8 +83,16 @@ final class ListeningPracticeSession {
             .map(PracticeAudioCatalog.normalizedText)
             .filter { !$0.isEmpty && seen.insert($0).inserted }
 
-        selectedTexts = texts
-        items = Self.makeItems(texts: texts, contrasts: activity.contrasts)
+        availableTexts = texts
+        let selectedTexts = PracticeRoundSampler.select(
+            texts: texts,
+            levelID: levelID,
+            kind: activity.kind,
+            scope: activity.scope,
+            progress: progress
+        )
+        self.selectedTexts = selectedTexts
+        items = Self.makeItems(texts: selectedTexts, contrasts: activity.contrasts)
         historicalScores = Self.historicalScores(
             for: texts,
             levelID: levelID,
@@ -225,6 +234,13 @@ final class ListeningPracticeSession {
 
     func restart(progress: UserProgress) {
         sessionID = UUID()
+        selectedTexts = PracticeRoundSampler.select(
+            texts: availableTexts,
+            levelID: levelID,
+            kind: activity.kind,
+            scope: activity.scope,
+            progress: progress
+        )
         historicalScores = Self.historicalScores(
             for: selectedTexts,
             levelID: levelID,
