@@ -30,12 +30,12 @@ struct LevelActivitiesView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 // Comment out this NavigationLink to hide the temporary debug entry.
-                NavigationLink {
-                    LevelProgressDebugView(level: level, progress: progress)
-                } label: {
-                    Image(systemName: "doc.badge.gearshape")
-                }
-                .accessibilityLabel("Open level progress debug view")
+//                NavigationLink {
+//                    LevelProgressDebugView(level: level, progress: progress)
+//                } label: {
+//                    Image(systemName: "doc.badge.gearshape")
+//                }
+//                .accessibilityLabel("Open level progress debug view")
             }
         }
 #endif
