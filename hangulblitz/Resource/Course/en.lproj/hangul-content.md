@@ -209,3 +209,122 @@ Review your learning in the recent levels
 #### Mixed Review
 
 There is no new content in this level. You will review and consolidate what you learned over the previous four levels.
+
+---
+
+# y-vowels
+## Y Series Vowels ㅑ ㅕ ㅛ ㅠ
+Learn the Y series vowels and combine them with ㅇ ㄱ ㄴ
+
+### title.overview
+#### Y Series Vowels
+In this vowel family, an extra short stroke adds a brief y sound at the beginning. The original direction of the vowel stays the same.
+
+| hangul | note | sound |
+| ------ | ---- | :---: |
+| ㅑ      | ㅏ a → ㅑ ya |       |
+| ㅕ      | ㅓ eo → ㅕ yeo |       |
+| ㅛ      | ㅗ o → ㅛ yo |       |
+| ㅠ      | ㅜ u → ㅠ yu |       |
+
+#### Combined with Silent Initial ㅇ
+ㅇ is silent at the beginning of a syllable. ㅑ ㅕ sit to its right, while ㅛ ㅠ sit below it.
+
+| hangul | note | sound |
+| ------ | ---- | :---: |
+| 야      | 아 a → 야 ya |       |
+| 여      | 어 eo → 여 yeo |       |
+| 요      | 오 o → 요 yo |       |
+| 유      | 우 u → 유 yu |       |
+
+#### Combined with ㄱ ㄴ
+Keep the consonant and replace the basic vowel with its Y counterpart.
+
+| hangul | note | sound |
+| ------ | ---- | :---: |
+| 갸      | gya |       |
+| 겨      | gyeo |       |
+| 교      | gyo |       |
+| 규      | gyu |       |
+| 냐      | nya |       |
+| 녀      | nyeo |       |
+| 뇨      | nyo |       |
+| 뉴      | nyu |       |
+
+### title.apply
+#### Read these words aloud
+> Each word contains only one or two Y vowels. Read the syllables first, then connect them smoothly.
+
+| hangul | note | sound |
+| ------ | ---- | :---: |
+| 우유     | milk |       |
+| 여우     | fox |       |
+| 이유     | reason |       |
+| 여유     | ease / room to spare |       |
+| 여기     | here |       |
+| 요리     | cooking |       |
+| 야구     | baseball |       |
+| 겨우     | barely / at last |       |
+| 고유     | unique / inherent |       |
+| 규모     | scale / size |       |
+| 그녀     | she / her |       |
+| 마녀     | witch |       |
+| 겨루다    | compete |       |
+| 다녀요    | attend / go regularly |       |
+
+---
+
+# y-vowels-transfer
+## Mixed Practice II
+Combine the Y series vowels with ㄷ ㄹ ㅁ ㅂ
+
+### title.overview
+#### Review and Transfer
+There are no new letters in this level. Apply the Y vowel pattern from the previous level to the familiar consonants ㄷ ㄹ ㅁ ㅂ.
+
+#### Combined with ㄷ ㄹ
+
+| hangul | note | sound |
+| ------ | ---- | :---: |
+| 댜      | dya |       |
+| 뎌      | dyeo |       |
+| 됴      | dyo |       |
+| 듀      | dyu |       |
+| 랴      | rya |       |
+| 려      | ryeo |       |
+| 료      | ryo |       |
+| 류      | ryu |       |
+
+#### Combined with ㅁ ㅂ
+
+| hangul | note | sound |
+| ------ | ---- | :---: |
+| 먀      | mya |       |
+| 며      | myeo |       |
+| 묘      | myo |       |
+| 뮤      | myu |       |
+| 뱌      | bya |       |
+| 벼      | byeo |       |
+| 뵤      | byo |       |
+| 뷰      | byu |       |
+
+### title.apply
+#### Read these words aloud
+> Not every syllable needs a Y vowel. Read the Y-vowel syllables accurately while keeping the whole word connected.
+
+| hangul | note | sound |
+| ------ | ---- | :---: |
+| 무료     | free of charge |       |
+| 유료     | paid / fee-charging |       |
+| 고려     | consideration / Goryeo |       |
+| 벼루     | inkstone |       |
+| 미묘     | subtle |       |
+| 묘미     | charm / special appeal |       |
+| 듀오     | duo |       |
+| 뮤비     | music video |       |
+| 뷰어     | viewer |       |
+| 며느리    | daughter-in-law |       |
+| 그려요    | draw / depict |       |
+| 버려요    | throw away |       |
+| 드려요    | give / offer (honorific) |       |
+| 누려요    | enjoy |       |

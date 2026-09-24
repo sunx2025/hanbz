@@ -44,7 +44,7 @@ enum MockCourse {
                     number: levelNumber,
                     title: localizedLevel?.title ?? copy.title,
                     description: localizedLevel?.description ?? copy.description,
-                    isAvailable: levelNumber <= 5,
+                    isAvailable: levelNumber <= 7,
                     overview: localizedLevel?.overview,
                     apply: localizedLevel?.apply,
                     currentActivities: activities(
@@ -443,12 +443,86 @@ enum MockCourse {
                     ]
                 )
             )
+        case 6:
+            LevelPracticeContent(
+                current: PracticeContent(
+                    guided: [
+                        ["ㅑ", "ㅕ", "ㅛ", "ㅠ"],
+                        ["야", "여", "요", "유"]
+                    ],
+                    reading: [
+                        ["ㅑ", "ㅕ", "ㅛ", "ㅠ"],
+                        ["야", "여", "요", "유"]
+                    ],
+                    listening: [["야", "여", "요", "유"]],
+                    contrasts: [["야", "여"], ["요", "유"]]
+                ),
+                mixed: PracticeContent(
+                    guided: [
+                        ["가", "갸", "거", "겨", "고", "교", "구", "규"],
+                        ["나", "냐", "너", "녀", "노", "뇨", "누", "뉴"]
+                    ],
+                    reading: [
+                        ["아", "야", "어", "여", "오", "요", "우", "유"],
+                        ["가", "갸", "거", "겨", "고", "교", "구", "규"],
+                        ["나", "냐", "너", "녀", "노", "뇨", "누", "뉴"]
+                    ],
+                    listening: [
+                        ["아", "야", "어", "여", "오", "요", "우", "유"],
+                        ["가", "갸", "거", "겨", "고", "교", "구", "규"],
+                        ["나", "냐", "너", "녀", "노", "뇨", "누", "뉴"]
+                    ],
+                    contrasts: [
+                        ["아", "야"], ["어", "여"], ["오", "요"], ["우", "유"],
+                        ["가", "갸"], ["거", "겨"], ["고", "교"], ["구", "규"],
+                        ["나", "냐"], ["너", "녀"], ["노", "뇨"], ["누", "뉴"],
+                        ["갸", "냐"], ["겨", "녀"], ["교", "뇨"], ["규", "뉴"],
+                        ["갸", "겨"], ["교", "규"], ["냐", "녀"], ["뇨", "뉴"]
+                    ]
+                )
+            )
+        case 7:
+            LevelPracticeContent(
+                current: nil,
+                mixed: PracticeContent(
+                    guided: [
+                        ["댜", "뎌", "됴", "듀", "랴", "려", "료", "류"],
+                        ["먀", "며", "묘", "뮤", "뱌", "벼", "뵤", "뷰"]
+                    ],
+                    reading: [
+                        ["다", "댜", "더", "뎌", "도", "됴", "두", "듀"],
+                        ["라", "랴", "러", "려", "로", "료", "루", "류"],
+                        ["마", "먀", "머", "며", "모", "묘", "무", "뮤"],
+                        ["바", "뱌", "버", "벼", "보", "뵤", "부", "뷰"],
+                        ["갸", "겨", "교", "규", "냐", "녀", "뇨", "뉴"]
+                    ],
+                    listening: [
+                        ["다", "댜", "더", "뎌", "도", "됴", "두", "듀"],
+                        ["라", "랴", "러", "려", "로", "료", "루", "류"],
+                        ["마", "먀", "머", "며", "모", "묘", "무", "뮤"],
+                        ["바", "뱌", "버", "벼", "보", "뵤", "부", "뷰"],
+                        ["갸", "겨", "교", "규", "냐", "녀", "뇨", "뉴"]
+                    ],
+                    contrasts: [
+                        ["다", "댜"], ["더", "뎌"], ["도", "됴"], ["두", "듀"],
+                        ["라", "랴"], ["러", "려"], ["로", "료"], ["루", "류"],
+                        ["마", "먀"], ["머", "며"], ["모", "묘"], ["무", "뮤"],
+                        ["바", "뱌"], ["버", "벼"], ["보", "뵤"], ["부", "뷰"],
+                        ["댜", "랴"], ["뎌", "려"], ["됴", "료"], ["듀", "류"],
+                        ["먀", "뱌"], ["며", "벼"], ["묘", "뵤"], ["뮤", "뷰"],
+                        ["댜", "뎌"], ["됴", "듀"], ["랴", "려"], ["료", "류"],
+                        ["먀", "며"], ["묘", "뮤"], ["뱌", "벼"], ["뵤", "뷰"],
+                        ["갸", "냐"], ["겨", "녀"], ["교", "뇨"], ["규", "뉴"],
+                        ["갸", "겨"], ["교", "규"], ["냐", "녀"], ["뇨", "뉴"]
+                    ]
+                )
+            )
         default:
             placeholderPracticeContent(levelNumber: levelNumber)
         }
     }
 
-    // Levels 5–9 keep the UI populated until their activity-by-activity mock data is defined.
+    // Levels 8–9 keep the UI populated until their activity-by-activity mock data is defined.
     private static func placeholderPracticeContent(levelNumber: Int) -> LevelPracticeContent {
         let sections = [placeholderItems(levelNumber: levelNumber)]
         let content = PracticeContent(
@@ -463,10 +537,6 @@ enum MockCourse {
 
     private static func placeholderItems(levelNumber: Int) -> [String] {
         switch levelNumber {
-        case 6:
-            ["ㅑ", "ㅕ", "ㅛ", "ㅠ", "야", "여", "요", "유"]
-        case 7:
-            ["가", "겨", "교", "규", "나", "녀", "뇨", "뉴"]
         case 8:
             ["ㅅ", "ㅈ", "ㅎ", "사", "자", "하", "서", "저", "허"]
         default:
@@ -507,8 +577,8 @@ enum MockCourse {
         LevelCopy(title: "Basic Consonants ㄷ ㄹ", description: "ㄷ ㄹ and combinations"),
         LevelCopy(title: "Basic Consonants ㅁ ㅂ", description: "ㅁ ㅂ and combinations"),
         LevelCopy(title: "Mixed Practice I", description: "가 거 고 구 그 기 etc"),
-        LevelCopy(title: "Y Series Vowels ㅑ ㅕ ㅛ ㅠ", description: "ㅑ ㅕ ㅛ ㅠ"),
-        LevelCopy(title: "Mixed Practice II", description: "가 겨 교 규 etc"),
+        LevelCopy(title: "Y Series Vowels ㅑ ㅕ ㅛ ㅠ", description: "Y vowels with ㅇ ㄱ ㄴ"),
+        LevelCopy(title: "Mixed Practice II", description: "Y vowels with ㄷ ㄹ ㅁ ㅂ"),
         LevelCopy(title: "Basic Consonants ㅅ ㅈ ㅎ", description: "ㅅ ㅈ ㅎ and combinations"),
         LevelCopy(title: "Mixed Practice III", description: "사 서 소 수 스 시 샤 셔 쇼 슈 etc")
     ]
@@ -519,8 +589,8 @@ enum MockCourse {
         LevelCopy(title: "基础辅音 ㄷ ㄹ", description: "ㄷ ㄹ及其拼读"),
         LevelCopy(title: "基础辅音 ㅁ ㅂ", description: "ㅁ ㅂ及其拼读"),
         LevelCopy(title: "综合练习（一）", description: "가 거 고 구 그 기等"),
-        LevelCopy(title: "Y系列元音 ㅑ ㅕ ㅛ ㅠ", description: "ㅑ ㅕ ㅛ ㅠ"),
-        LevelCopy(title: "综合练习（二）", description: "가 겨 교 규等"),
+        LevelCopy(title: "Y系列元音 ㅑ ㅕ ㅛ ㅠ", description: "Y 元音与 ㅇ ㄱ ㄴ 的拼读"),
+        LevelCopy(title: "综合练习（二）", description: "Y 元音与 ㄷ ㄹ ㅁ ㅂ 的拼读"),
         LevelCopy(title: "基础辅音 ㅅ ㅈ ㅎ", description: "ㅅ ㅈ ㅎ及其拼读"),
         LevelCopy(title: "综合练习（三）", description: "사 서 소 수 스 시 샤 셔 쇼 슈等")
     ]
